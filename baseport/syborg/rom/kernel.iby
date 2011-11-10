@@ -1,0 +1,86 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: Used by textshell roms
+*
+*/
+
+//#define USE_AUTOEXEC
+
+#define	EUSER_DLL	_##VARIANT##_EUSER.DLL
+
+// Must align kernel to 16K boundary since exception vectors will be mapped at 0xFFFF0000
+primary[VARID]=		\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_EKERN.EXE		\sys\bin\EKERN.EXE	code-align 0x4000
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_BTRACEX.LDD		\sys\bin\BTRACEX.LDD
+variant[VARID]=		\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_KASYBORG.DLL		\sys\bin\KASYBORG.DLL
+
+// IEEE-mode VFP support
+//extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\EVFP.DLL				\sys\bin\EVFP.DLL
+
+// Common monitor support. Must be before both interactive debugger and automatic logger.
+extension[VARID]=   	\Epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_EXMONCOMMON.DLL 	\sys\bin\EXMONCOMMON.DLL
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_EXMONDEBUG.DLL  	\sys\bin\EXMONDEBUG.DLL
+
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\KDEBUG.DLL				\sys\bin\KDEBUG.DLL
+
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_LCD.DLL		\sys\bin\LCD.DLL
+device[VARID]=		\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_ESERIAL.PDD    	\sys\bin\EUART1.PDD
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\ELOCD.LDD				\sys\bin\ELOCD.LDD
+
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_EPOINTER.DLL		\sys\bin\EPOINTER.DLL
+
+device[VARID]=		\epoc32\release\##KMAIN##\##BUILD##\ECOMM.LDD				\sys\bin\ECOMM.LDD
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\EXSTART.DLL				\sys\bin\EXSTART.DLL
+
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_EKEYB.DLL		\sys\bin\EKEYB.DLL
+
+file[VARID]=		\epoc32\release\##MAIN##\##BUILD##\_##VARIANT##_EKDATA.DLL		\sys\bin\EKDATA.DLL
+
+// Kernel pipe
+device[VARID]=      	\epoc32\release\##KMAIN##\##BUILD##\PIPELIB.LDD 		        \sys\bin\PIPELIB.LDD
+
+// Host Filesystem
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_svphostfsdriver.ldd	\sys\bin\svphostfsdriver.ldd
+file=			\epoc32\release\##KMAIN##\##BUILD##\svphostfsy.fsy			\sys\bin\svphostfsy.fsy
+file=			\epoc32\release\##KMAIN##\##BUILD##\svphostfs.exe			\sys\bin\svphostfs.exe
+
+//file=			\epoc32\release\##KMAIN##\##BUILD##\svphostfsstart.exe			\sys\bin\sysstart.exe
+#define CUSTOM_ESTART
+file=				\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_e32strt.exe		sys\bin\estart.exe HEAPMAX (0x10000)
+
+
+// Snap Driver
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_svpsnapdriver.ldd  \sys\bin\svpsnapdriver.ldd
+file=			\epoc32\release\##KMAIN##\##BUILD##\snapapp.exe			\sys\bin\snapapp.exe
+
+// Webcamera Driver
+device[VARID]=		\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_webcamera.PDD    	\sys\bin\webcamera.PDD
+device[VARID]=		\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_ewebcamera.LDD    	\sys\bin\ewebcamera.LDD
+file=			\epoc32\release\##KMAIN##\##BUILD##\webcamera_app.exe			\sys\bin\webcamera_app.exe
+
+/* Generic nonvolatile memory */
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_MEDNVMEMORY.PDD	    	\sys\bin\MEDNVMEMORY.PDD
+
+// Estart
+data=               	\epoc32\rom\syborg\ESTART.TXT					    \sys\data\ESTART.TXT
+
+#ifdef USE_AUTOEXEC
+data=               	\epoc32\rom\##VARIANT##\AUTOEXEC.BAT        					AUTOEXEC.BAT
+#endif
+
+extension[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_MEDINT.PDD	    \sys\bin\MEDINT.PDD
+//device[VARID]=	\epoc32\release\##KMAIN##\##BUILD##\D_DEBUG.LDD					\sys\bin\D_DEBUG.LDD
+
+device[VARID]	= \epoc32\release\##KMAIN##\##BUILD##\_##VARIANT##_soundsc.pdd	    \sys\bin\soundsc.pdd
+device[VARID]	= \epoc32\release\##KMAIN##\##BUILD##\esoundsc.ldd				            \sys\bin\esoundsc.ldd
+

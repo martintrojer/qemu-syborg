@@ -1,0 +1,58 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+
+
+#include        <variant.mmh>
+
+TARGET			VariantTarget(e32strt,exe)
+CAPABILITY		TCB WriteDeviceData DiskAdmin ProtServ AllFiles PowerMgmt
+
+TARGETTYPE		exe
+
+
+SOURCEPATH	\sf\os\kernelhwsrv\userlibandfileserver\fileserver\estart
+SOURCE			estart.cpp
+SOURCEPATH		../estart
+SOURCE			estartmain.cpp
+
+STRICTDEPEND
+
+//SOURCEPATH	.
+//DOCUMENT		 ../group/release.txt
+
+USERINCLUDE     \sf\os\kernelhwsrv\userlibandfileserver\fileserver\estart
+//SYSTEMINCLUDE	../inc /epoc32/include
+SYSTEMINCLUDE	/epoc32/include
+
+LIBRARY			efsrv.lib euser.lib hal.lib
+LIBRARY			domaincli.lib
+
+//#ifdef WINS
+//LIBRARY			emulator.lib
+//#endif
+
+//START WINS
+//BASEADDRESS		0x62000000
+//win32_library	kernel32.lib
+//END
+
+
+UID		0 0x10272C04
+VENDORID 0x70000001
+
+//#include "../group/f32.mmh"  	// Generic definitions for the whole f32 component

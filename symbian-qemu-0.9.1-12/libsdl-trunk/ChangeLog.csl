@@ -1,0 +1,9 @@
+2008-11-03  Paul Brook  <paul@codesourcery.com>
+
+	* include/SDL_config.h: Remove.
+
+2008-10-29  Paul Brook  <paul@codesourcery.com>
+
+	* configure: Add EXTRA_LDFLAGS to SDL_STATIC_LIBS.
+	* configure.in: Regenerate.
+	* src/video/windib/SDL_dibvideo.c (SYSPAL_NOSTATIC256): Define.

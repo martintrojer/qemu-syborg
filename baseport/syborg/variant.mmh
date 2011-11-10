@@ -1,0 +1,140 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+#include <platform_paths.hrh>
+
+//macro   __CPU_ARM926J__
+//#define __CPU__ ARM926EJ-S
+
+//macro __CPU_ARM1136__
+
+//#define __CPU_ARM1176__
+
+macro __CPU_CORTEX_A8N__
+macro __VFP_V3
+#define SYBORG
+macro __SYBORG__
+
+#define MM_MULTIPLE
+//#define MM_FLEXIBLE
+
+// TO DO: decide if we need to switch these on or off!!
+//
+// Uncomment the following line if using the r1p0 release or later of the ARM1136 processor.
+// 
+//#define __CPU_ARM1136_IS_R1__
+//
+
+/* Uncomment if ARM1136 Erratum 351912
+ * "VFP11 double precision multiply can corrupt data"
+ * is fixed on this hardware.
+ */
+//macro __CPU_ARM1136_ERRATUM_351912_FIXED
+
+/* Uncomment if ARM1136 Erratum 353494
+ * "Rare conditions can cause corruption of the Instruction Cache"
+ * is fixed on this hardware.
+ */
+//macro __CPU_ARM1136_ERRATUM_353494_FIXED
+
+/* Uncomment if ARM1136 Erratum 371025
+ * "Invalidate Instruction Cache operation can fail"
+ * is fixed on this hardware.
+ */
+//macro __CPU_ARM1136_ERRATUM_371025_FIXED
+
+/* Uncomment if using ARM1136 processor and ARM1136 Erratum 399234
+ * "Write back data cache entry evicted by write through entry causes data corruption"
+ * is fixed on this hardware.
+ * Workaround
+ * The erratum may be avoided by marking all cacheable memory as one of write through or write back.
+ * This requires the memory attributes described in the translation tables to be modified by software
+ * appropriately, or the use of the remapping capability to remap write through regions to non cacheable.
+ * If this macro is enabled, it should be acompanied by:
+ *					GBLL	CFG_CPU_ARM1136_ERRATUM_399234_FIXED in config.inc
+ */
+//macro __CPU_ARM1136_ERRATUM_399234_FIXED
+
+/* Uncomment if ARM1136 Erratum 408022 "Cancelled write to CONTEXTID register might update ASID" 
+ * is fixed on this hardware.
+ */
+//macro __CPU_ARM1136_ERRATUM_408022_FIXED
+
+// TO DO:
+//
+// Uncomment the next line if using the ARM1136 processor and ARM1136 Erratum 406973
+// "CLREX instruction might be ignored during data cache line fill"
+// is fixed on this hardware.
+// 
+//#define __CPU_ARM1136_ERRATUM_406973_FIXED
+
+
+// Uncomment if:
+//	1)	using ARM1136 processor and ARM1136 Erratum 411920: "Invalidate Entire Instruction Cache
+//	  	operation might fail to invalidate some lines if coincident with linefill"
+//  	  	is fixed on this hardware, or
+//	2)	using ARM1176 processor and ARM1176 Erratum 415045: "Invalidate Entire Instruction Cache
+// 	  	operation might fail to invalidate some lines if coincident with linefill
+//	  	is fixed on this hardware.
+// Workaround:
+//	1)	Disables the use of of prefetch range cache operations by setting RV bit in Auxiliary Ctrl Reg.
+//	2)	Replaces Invalidate ICache operation with the sequence defined in the errata document.
+// If this macro is enabled, it should be accompanied by:
+// 	"GBLL CFG_CPU_ARM1136_ERRATUM_411920_FIXED" in variant.mmh
+//
+//macro __CPU_ARM1136_ERRATUM_411920_FIXED
+
+
+#ifndef GCCE
+macro __CPU_HAS_VFP
+#define USE_VFP_MATH
+#endif
+// !@! not moving when 1136
+//#define MM_MOVING
+macro __DEBUGGER_SUPPORT__
+macro FASTTRACE_KERNEL_ALL
+macro __EMI_SUPPORT__
+
+#define VariantTarget(name,ext)     _syborg_##name##.##ext
+#define AsspNKernIncludePath        /epoc32/include/syborg
+#define VariantMediaDefIncludePath  /epoc32/include/syborg        
+#define PlatformLib		   		    kasyborg.lib
+
+systeminclude	/epoc32/include/memmodel/epoc/mmubase
+//systeminclude	/epoc32/include/memmodel/epoc/moving
+//systeminclude	/epoc32/include/memmodel/epoc/moving/arm
+//systeminclude	/epoc32/include/memmodel/epoc/flexible
+//systeminclude	/epoc32/include/memmodel/epoc/flexible/arm
+systeminclude	/epoc32/include/memmodel/epoc/multiple
+systeminclude	/epoc32/include/memmodel/epoc/multiple/arm
+
+SYMBIAN_BASE_SYSTEMINCLUDE(memmodel/epoc/mmubase)
+SYMBIAN_BASE_SYSTEMINCLUDE(memmodel/epoc/multiple)
+SYMBIAN_BASE_SYSTEMINCLUDE(memmodel/epoc/multiple/arm)
+OS_LAYER_SYSTEMINCLUDE
+
+systeminclude	../../../../os/kernelhwsrv/driversupport/socassp/interface
+
+// Uncomment for T_USERCOMDEB test
+//#define BUILD_TESTS
+
+#ifdef BUILD_TESTS
+macro BTRACE_KERNEL_ALL
+#endif
+
+//OPTION_REPLACE	ARMCC  --cpu __CPU__
+//OPTION_REPLACE	ARMASM --cpu __CPU__

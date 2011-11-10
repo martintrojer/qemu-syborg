@@ -1,0 +1,102 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: Syborg interrupt control and dispatch
+*
+*/
+
+#include <e32cia.h>
+#include <syborg_priv.h>
+#include <cpudefs.h>
+
+// CIA symbols for ASSP code?
+#if defined(__GCC32__)
+// CIA symbol macros for Gcc98r2
+#define CSM_ZN7NTimerQ4TickEv " Tick__7NTimerQ"
+#elif defined(__ARMCC__)
+// CIA symbol macros for RVCT
+#define CSM_ZN7NTimerQ4TickEv " __cpp(NTimerQ::Tick)"
+#else
+// CIA symbol macros for EABI assemblers
+#define CSM_ZN7NTimerQ4TickEv " _ZN7NTimerQ4TickEv"
+#endif
+
+/********************************************************************
+ * Wait for interrupt idle routine which does not disable interrupts
+ ********************************************************************/
+ 
+__NAKED__ void SyborgWFIIdle()
+{
+	// Enter an idle state and wait for interrupts
+	asm("mov r0, #0");
+	asm("mcr p15, 0, r0, c7, c0, 4");
+	asm("bx lr");
+}
+
+/********************************************************************
+ * Service 1ms tick interrupt & timer 1 interrupt
+ ********************************************************************/
+
+__NAKED__ void SyborgInterrupt::MsTimerTick(TAny* /*aPtr*/)
+{
+	// Service 1ms tick interrupt
+	asm("ldr r1, __KHwCounterTimer");
+	asm("push {r0}");
+	asm("mov r0, #1");
+	asm("str r0, [r1, #24]");
+	asm("pop {r0}");
+	asm("b "CSM_ZN7NTimerQ4TickEv);
+	asm("bx lr");
+
+	asm("__KHwCounterTimer:");
+	asm(".word %a0" : : "i" ((TInt)KHwBaseCounterTimer));
+}
+
+/********************************************************************
+ * Interrupt handling/dispatch
+ ********************************************************************/
+// IRQ dispatcher
+// Enter with r0-r3, r12 and return address on IRQ stack
+// Must preserve r4-r11
+// Uses r4,r5,r12
+__NAKED__ void SyborgInterrupt::IrqDispatch()
+{
+	asm("push {r4,r5,lr} ");
+	asm("ldr r4, __KHwBaseSic");
+	asm("ldr r12, __SicHandlerStart");
+	asm("ldr r5, [r4, #8]");  // r5 - pending interrupt
+	asm("adr lr, Clear");
+	asm("add r12, r5, lsl #3");
+	asm("ldm r12, {r0, pc}");
+	
+	asm("Clear:");
+	//	asm("str r5, [r4, #16]");        // TODO: error
+	asm("pop {r4,r5,pc}");
+
+	asm("__KHwBaseSic:");
+	asm(".word %a0" : : "i" ((TInt)KHwBaseSic));
+	asm("__SicHandlerStart:");
+	asm(".word %a0" : : "i" (&Handlers[0]));
+}
+
+__NAKED__ void SyborgInterrupt::FiqDispatch()
+{
+	// FIQ dispatcher
+	// Enter with return address on FIQ stack
+	// We may use r8-r12, but must preserve other registers
+	// NOTE: STACK IS MISALIGNED ON ENTRY (1 WORD PUSHED)
+	asm("push {r0-r3,lr}");
+	// FIQ Handler to go in here.
+	// Not needed because no FIQs are currently used
+	asm("pop {r0-r3,pc}");
+}

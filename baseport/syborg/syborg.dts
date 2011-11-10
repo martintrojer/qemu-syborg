@@ -1,0 +1,146 @@
+/ {
+    #address-cells = <1>;
+    #size-cells  = <1>;
+
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        cpu0: ARM,Cortex-A8@0 {
+            device_type = "cpu";
+            reg = <0>;
+        };
+    };
+    memory@0 {
+        device_type = "memory";
+        reg = <0 20000000>;
+    };
+    syborg {
+        #address-cells = <1>;
+        #size-cells = <0>;
+        intc: intc@0 {
+            compatible = "syborg,interrupt";
+            #interrupt-cells = <1>;
+            reg = <c0000000>;
+            interrupt-controller;
+            qemu,interrupts = <&cpu0 0>;
+            num-interrupts = <20>;
+        };
+        rtc@0 {
+            compatible = "syborg,rtc";
+            reg = <c0001000>;
+        };
+        timer@0 {
+            compatible = "syborg,timer";
+            reg = <c0002000>;
+            frequency = <d#100000>;
+            interrupts = <1>;
+            interrupt-parent = <&intc>;
+        };
+        keyboard@0 {
+            compatible = "syborg,keyboard";
+            reg = <c0003000>;
+            interrupts = <2>;
+            interrupt-parent = <&intc>;
+        };
+        touchscreen@0 {
+            compatible = "syborg,pointer";
+            reg = <c0004000>;
+            interrupts = <3>;
+            interrupt-parent = <&intc>;
+        };
+        framebuffer@0 {
+            compatible = "syborg,framebuffer";
+	    width = <300>;
+            height = <280>;
+            reg = <c0005000>;
+            interrupts = <4>;
+            interrupt-parent = <&intc>;
+        };
+        serial@0 {
+            device_type = "serial";
+            compatible = "syborg,serial";
+            chardev = "serial0";
+            reg = <c0006000>;
+            interrupts = <5>;
+            interrupt-parent = <&intc>;
+        };
+        serial@1 {
+            device_type = "serial";
+            compatible = "syborg,serial";
+            chardev = "serial1";
+            reg = <c0007000>;
+            interrupts = <6>;
+            interrupt-parent = <&intc>;
+        };
+        serial@2 {
+            device_type = "serial";
+            compatible = "syborg,serial";
+            chardev = "serial2";
+            reg = <c0008000>;
+            interrupts = <7>;
+            interrupt-parent = <&intc>;
+        };
+        serial@3 {
+            device_type = "serial";
+            compatible = "syborg,serial";
+            chardev = "serial3";
+            reg = <c0009000>;
+            interrupts = <8>;
+            interrupt-parent = <&intc>;
+        };
+        hostfs@0 {
+            compatible = "syborg,hostfs";
+            reg = <c000a000>;
+	    host-path = "\\svphostfs\\";
+	    drive-number = <d#5>;
+        };
+        ss@0 {
+            compatible = "syborg,snapshot";
+            reg = <c000b000>;
+        };
+        net@0 {
+            compatible = "syborg,virtio-net";
+            reg = <c000c000>;
+            interrupts = <9>;
+            interrupt-parent = <&intc>;
+        };
+        nand@0 {
+            compatible = "syborg,nand";
+            reg = <c000d000>;
+            size = <400>;
+        };
+        audio@0 {
+            compatible = "syborg,virtio-audio";
+            reg = <c000e000>;
+            interrupts = <a>;
+            interrupt-parent = <&intc>;
+        };
+        usbtest@0 {
+            compatible = "syborg,usbtest";
+            reg = <c000f000>;
+            interrupts = <b>;
+            interrupt-parent = <&intc>;
+        };
+        nvmemorydevice@0 {
+            compatible = "syborg,nvmemorydevice";
+            drive_size = <4000000>;
+            sector_size = <200>;
+            drive_image_name = "syborg_system.img";
+            reg = <c0010000>;
+            interrupts = <c>;
+            interrupt-parent = <&intc>;
+        };
+        timer@1 {
+            compatible = "syborg,timer";
+            reg = <c0011000>;
+            frequency = <d#0100000>;
+            interrupts = <e>;
+            interrupt-parent = <&intc>;
+        };
+        platform@0 {
+            compatible = "syborg,platform";
+            reg = <c0012000>;
+        };
+    };
+};
+

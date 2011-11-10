@@ -1,0 +1,16 @@
+Version Information
+===================
+
+Version:           0.9.1-12
+Host spec(s):      i686-pc-linux-gnu i686-mingw32
+Target:            arm-none-symbianelf
+
+Build Information
+=================
+
+Build date:             20090402
+Build machine:          henry2
+Build operating system: lenny/sid
+Build uname:            Linux henry2 2.6.24-19-server #1 SMP Wed Aug 20 18:43:06 UTC 2008 x86_64 unknown unknown GNU/Linux
+Build user:             paul
+

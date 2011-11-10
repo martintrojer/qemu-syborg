@@ -1,0 +1,43 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+//macro	__KERNEL_MODE__
+
+#include <variant.mmh>
+#include   <kernel/kern_ext.mmh>
+
+systeminclude		AsspNKernIncludePath
+systeminclude		inc
+systeminclude		../svpplatform/libfdt
+systeminclude 		/epoc32/include/stdapis
+OS_LAYER_LIBC_SYSTEMINCLUDE
+
+target			VariantTarget(svphostfsdriver,ldd)
+linkas			svphostfsdriver.ldd
+targettype		ldd
+
+
+sourcepath		driver
+source			svphostfsdriver.cpp stringops.c
+
+option armcc --gnu
+
+staticlibrary		libfdt.lib 
+noexportlibrary
+
+vendorid 		0x70000001
+capability		all

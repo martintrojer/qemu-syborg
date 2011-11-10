@@ -1,0 +1,44 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+* Sosco
+*
+* Description:
+* Variant derived from fb.mmp
+*
+*/
+
+#include <variant.mmh>
+#include "kernel/kern_ext.mmh"
+
+MACRO __PORTRAIT_DISPLAY__
+MACRO __DISPLAY_WVGA__
+
+TARGET			VariantTarget(lcd_portrait_wvga,dll)
+TARGETTYPE		kext
+
+SYSTEMINCLUDE	AsspNKernIncludePath
+SYSTEMINCLUDE	.
+
+SOURCEPATH		.
+SOURCE			syborg_fb.cpp
+
+LIBRARY			PlatformLib
+
+EPOCALLOWDLLDATA
+
+UID			    0x1000008d 0x100039e8
+VENDORID        0x70000001
+
+ROMTARGET		lcd.dll
+
+CAPABILITY		all

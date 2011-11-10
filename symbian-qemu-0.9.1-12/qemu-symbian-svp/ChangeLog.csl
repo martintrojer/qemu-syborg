@@ -1,0 +1,1516 @@
+2009-03-13  Paul Brook  <paul@codesourcery.com>
+
+	* python-plugin.c (qemu_python_init): Avoid quoting issues on
+	windows.
+
+2009-03-11  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (restore_snapshot): New.
+	(qemu_snapshot_request_restore): New function.
+	(qemu_snapshot_request): Clear restore_snapshot.
+	(main_loop): Handle restoring snapshots.
+	* sysemu.h (qemu_snapshot_request_restore): Add prototype.
+	* hw/syborg_snapshot.c (syborg_snapshot_trigger): Implement snapshot
+	restore.
+	(syborg_snapshot_write): Pass value to syborg_snapshot_trigger.
+
+2009-03-04  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (find_bios_dir): Avoid "../" on windows.
+
+2009-03-04  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target: Add python-plugin.o. Remove obsolete syborg
+	machines and devices.
+	* python-plugin.c: New file.
+	* vl.c (bios_dir): Initialize to NULL.
+	(find_bios_dir): New function.
+	(main): Call find_bios_dir and qemu_python_init.
+	* devtree.c (QEMUDeviceProperty): Add opaque.
+	(QEMUDevice): Add irq and mem_opaque.
+	(qdev_add_class_opaque, qdev_get_class_opaque): New functions.
+	(qdev_create): Allocate dev->irq.
+	(qdev_set_region_opaque, qdev_set_irq_level): New functions.
+	(create_from_node): Use d->mem_opaque.
+	(fixup_irqs): Set dev->irq.
+	* configure: Add Python support.
+	* devtree.h (qdev_add_class_opaque, qdev_set_irq_level,
+	qdev_get_class_opaque, qdev_set_region_opaque): Add prototypes.
+	* sysemu.h (qemu_python_init): Add prototype.
+	* target-arm/machine.c (register_machines): Remove syborg_machine and
+	oldsyborg_machine.
+	* plugins/syborg_fb.py: New file.
+	* plugins/syborg_rtc.py: New file.
+	* plugins/syborg_interrupt.py: New file.
+	* plugins/syborg_serial.py: New file.
+	* plugins/syborg_keyboard.py: New file.
+	* plugins/syborg_pointer.py: New file.
+	* plugins/syborg_timer.py: New file.
+	* plugins/qemu_arm_plugins.py: New file.
+	* syborg.c: Remove.
+	* syborg_timer_old.c: Remove.
+	* syborg_keyboard_old.c: Remove.
+	* syborg_serial_old.c: Remove.
+	* syborg_interrupt_old.c: Remove.
+	* syborg_mouse.c: Remove.
+	* syborg_interrupt.c: Remove.
+	* syborg_timer.c: Remove.
+	* syborg_rtc.c: Remove.
+	* syborg_serial.c: Remove.
+	* syborg_keyboard.c: Remove.
+	* syborg_pointer.c: Remove.
+	* syborg_fb.c: Remove.
+
+2009-02-27  Daniel Gutson  <dgutson@codesourcery.com>
+
+	* Makefile.target (LIBS): Add expat.
+	* configure: Add expat probe.
+	* gui.c (gui_load): Fixed to use new parser implementation.
+	* gui_parser.c: Re-written to use expat as the implementation.
+	* gui_parser.h (parse_result_t): Aded OUT_OF_MEMORY error code.
+	* sdl.c (kbd_fsm_state_t): Removed as part of the code cleanup.
+	(kbd_fsm_stimuli_t): Likewise.
+	(kbd_fsm_state): Likewise.
+	(process_kbd_fsm_stimuli): Likewise.
+	(process_kbd_fsm_key): Likewise.
+	(sdl_gui_turn_cursor_on): Added missing case.
+
+2009-02-19  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_fb.c: Add debug code.
+	* hw/syborg_keyboard.c: Ditto.
+	* hw/syborg_timer.c: Ditto.
+
+2009-02-19  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_fb.c (syborg_fb_save): Save s->enabled.
+	(syborg_fb_load): Load s->enabled.  Force update.
+	(syborg_fb_register): Bump savevm version.
+	* target-arm/machine.c (cpu_save): Save cp15.c2_control and
+	cp15.c2_base_mask.
+	(cpu_load): Restore cp15.c2_control and cp15.c2_base_mask.
+	Avoid clobbering banked registers by spurious mode change.
+
+2009-02-10  Paul Brook  <paul@codesourcery.com>
+
+	* boards/syborg.dts (hostfs@0): Add path and drive number.
+	* hw/syborg_hostfs.c (hostfs_file_open): Add O_CREAT for EFileReplace.
+	(syborg_hostfs_create): Add separator conversion for prefix path.
+	* hw/syborg_platform.c (PLATFORM_TREE_OFFSET): Define.
+	(syborg_platform_readl, syborg_platform_readw, syborg_platform_readb):
+	Use it.  Correct device tree offsets.
+
+2009-02-05  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_hostfs.c (hostfs_dir): Add path.
+	(HOSTFS_ATTR_READONLY, HOSTFS_ATTR_HIDDEN, HOSTFS_ATTR_DIRECTORY):
+	Define.
+	(hostfs_map_file_att): Use new defines.
+	(hostfs_dir_read): Return file attributes.
+
+2009-01-21  Daniel Gutson  <dgutson@codesourcery.com>
+
+	* gui.c (gui_button_sendkey_dn): Removed warnings.
+	(gui_button_sendkey_up): Likewise.
+	(load_gui_image): Likewise.
+	(load_gui_button): Likewise.
+	(gui_loaded_is_graphic_console): Function removed.
+	* gui_png.c (gui_load_image_png): Removed warnigs and dead code.
+	* display_state.h: New file.
+	* gui_host.h: Moved declarations from here to display_state.h.
+	* hw/gui.h: Likewise.
+
+2009-01-20  Paul Brook  <paul@codesourcery.com>
+
+	* hw/nand.c (nand_init): Initialize s->ioaddr.
+
+2009-01-20  Daniel Gutson  <dgutson@codesourcery.com>
+
+	* gui.c: Fixed copyright year in heading.
+	* gui_host.h: Likewise.
+	* gui_png.c: Likewise.
+	* gui_png.h: Likewise.
+	* gui_parser.c: Likewise.
+	* gui_parser.h: Likewise.
+	* gui_common.h: Likewise.
+	* hw/gui.h: Likewise.
+
+2009-01-20  Paul Brook  <paul@codesourcery.com>
+
+	* configure: Add extra flags to libpng test so that -lz works.
+
+2009-01-19  Paul Brook  <paul@codesourcery.com>
+
+	* hw/virtio-audio.c (virtio_audio_handle_cmd, virtio_audio_load): Fix
+	net/audio typo in audio stream names.
+
+2009-01-19  Daniel Gutson  <dgutson@codesourcery.com>
+
+	* gui.c: Add heading.
+	* gui_host.h: Likewise.
+	* gui_png.c: Likewise.
+	* gui_png.h: Likewise.
+	* gui_parser.c: Likewise.
+	* gui_parser.h: Likewise.
+	* gui_common.h: Likewise.
+	* hw/gui.h: Likewise.
+
+2009-01-19  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (print_machines): New function.
+	(main): Use it.  Error if no machine is specified.
+
+2009-01-19  Daniel Gutson  <dgutson@codesourcery.com>
+
+	* gui.c (gui_register_mouse_event_handler): Fixed non-GUI mode.
+
+2009-01-19  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_hostfs.c (HOSTFS_PATH_MAX, HOST_CHAR): Move up in file.
+	(hostfs_dir): Define for !_WIN32.
+	(hostfs_dir_open, hostfs_dir_read): Implement pattern matching.
+	(hostfs_dir_close): Free handle data.
+	(syborg_hostfs_reset): Dirro.
+
+2009-01-19  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (OBJS): Add virtio-audio.o
+	* boards/syborg.dts: Add audio device.
+	* hw/syborg_virtio (syborg_virtio_audio_create): New function.
+	(syborg_virtio_register): Register audio device.
+	* hw/virtio-audio.c: New file.
+	* hw/virtio-audio.h: New file.
+
+2009-01-19  Paul Brook  <paul@codesourcery.com>
+
+	* gui.c (gui_update_timer, gui_notify_update_tick, gui_update_timer):
+	Use 64-bit tick count.
+	* gui_host.h (gui_notify_update_tick): Update prototype.
+
+2009-01-19  Daniel Gutson  <dgutson@codesourcery.com>
+
+	GUI added
+
+	* Makefile (OBJS): Add gui files.
+	* configure: Add libpng use and detection.
+	* console.c: Updated to interact with the GUI.
+	* console.h: Likewise.
+	* monitor.c: Likewise.
+	* qemu-char.c: Likewise.
+	* sdl.c: Likewise.
+	* vl.c: Likewise.
+	* hw/blizzard.c: Likewise.
+	* hw/musicpal.c: Likewise.
+	* hw/nseries.c: Likewise.
+	* hw/omap_lcdc.c: Likewise.
+	* hw/omap_sx1.c: Likewise.
+	* hw/palm.c: Likewise.
+	* hw/pl110.c: Likewise.
+	* hw/ps2.c: Likewise.
+	* hw/pxa2xx_keypad.c: Likewise.
+	* hw/pxa2xx_lcd.c: Likewise.
+	* hw/spitz.c: Likewise.
+	* hw/ssd0303.c: Likewise.
+	* hw/ssd0323.c: Likewise.
+	* hw/stellaris_input.c: Likewise.
+	* hw/tc6393xb.c: Likewise.
+	* hw/usb-hid.c: Likewise.
+	* hw/vga.c: Likewise.
+	* hw/vga_int.h: Likewise.
+	* hw/fb_render_engine.c: Data types fixed, and updated to interact
+	with the GUI.
+	* hw/fb_render_engine.h: Data types fixed.
+	* hw/syborg_fb.c: Updated to interact with the GUI.
+	* hw/syborg_keyboard.c: Likewise.
+	* hw/syborg_keyboard_old.c: Likewise.
+	* hw/syborg_pointer.c: Likewise.
+	* hw/gui.c: New file.
+	* hw/gui.h: New file.
+	* hw/gui_common.h: New file.
+	* hw/gui_parser.c: New file.
+	* hw/gui_parser.h: New file.
+	* hw/gui_png.c: New file.
+	* hw/gui_png.h: New file.
+	* curses.c: Add temporary changes to compile with the GUI.
+	* vnc.c: Likewise.
+	* qemu-common.h (QEMUConsole): Removed.
+
+2009-01-18  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (DEVICES): Add syborg_nand.
+	* boards/syborg.dts: Add NAND Flash device.
+	* hw/syborg_nand.c: New file.
+	* hw/syborg.h (SYBORG_ID_NAND): Define.
+
+2009-01-18  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_serial.c: Whitespace formatting fixes.
+
+2009-01-18  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (OBJS): Add virtio-pci.
+	(DEVICES): Add syborg_virtio.
+	* hw/virtio-balloon.c (virtio_balloon_init): Use binding function.
+	* hw/virtio-balloon.h (virtio_balloon_init): Update prototype.
+	* hw/virtio-net.c (virtio_net_init): Use binding function.
+	* hw/virtio-net.h: Don't include pci.h.
+	* virtio-blk.c (virtio_blk_init): Use binding function.
+	* virtio-blk.h (virtio_blk_init): Update prototype.
+	* hw/virtio-pci.c: New file.
+	* hw/virtio-pci.h: New file.
+	* hw/pci.c: Include virtio-pci.h
+	(pci_nic_init): Use virtio_net_init_pci.
+	* hw/syborg_virtio.c: New file.
+	(virtio_net_init): Update prototuype.
+	* hw/virtio.c: Move PCI bus bindings to virtio-pci.c.
+	(VirtQueue): Use physical address, not pfn.
+	(virtio_config_readb, virtio_config_readw, virtio_config_readl,
+	virtio_config_writeb, virtio_config_writew, virtio_config_writel):
+	Remove PCI specific code.  Export.
+	(virtio_set_vring_addr, virtio_get_vring_pa, virtio_get_vring_num,
+	virtio_kick): New functions.
+	(virtio_save, virtio_load): Replace PCI code with binding callbacks.
+	(virtio_init_common): New function.
+	* hw/virtio.h: Don't include pci.h.  Add new prototypes.
+	(virtio_update_irq): New function.
+	(VirtIODevice): Add bus binding callbacks.
+	* hw/pc.c: Include virtio-pci.h.
+	(pc_init1): Use virtio_blk_init_pci and virtio_balloon_init_pic.
+	* hw/ppc440_bamboo.c: Include virtio-pci.h.
+	(bamboo_init): Use virtio_blk_init_pci.
+	* boards/syborg.dts: Add net device.
+	* hw/syborg.h: Add SYBORG_ID_VIRTIO.
+	* hw/syborg_virtio.c: New file.
+
+2009-01-17  Paul Brook  <paul@codesourcery.com>
+
+	* savevm.c (do_savevm_file, do_loadvm_file): New functions.
+	(do_savevm): Use do_savevm_file.
+	(do_loadvm): Use do_loadvm_file.
+	* Makefile.target (DEVICES): Add syborg_shapshot.
+	* vl.c (snapshot_requested): New.
+	(qemu_snapshot_request, qemu_snapshot_requested): New functions.
+	(main_loop): Check is a snapshot has been requested.
+	* boards/syborg.dts: Add snapshot device.
+	* sysemu.h (qemu_snapshot_request, qemu_snapshot_requested): Add
+	Prototypes.
+	* hw/syborg_svpsnap.c: Remove.
+	* hw/syborg.h (SYBORG_ID_SNAPSHOT): New.
+	* hw/syborg_snapshot.c: New file.
+
+2009-01-16  Paul Brook  <paul@codesourcery.com>
+
+	* devtree.c (QEMUDeviceClass): Add save_state, load_state and
+	savevm_version.
+	(qdev_add_savevm): New function.
+	(create_from_node): Call register_savevm.
+	* devtree.h (qdev_add_savevm): Add prototype.
+	* hw/syborg_serial.c (syborg_serial_save, syborg_serial_load): New.
+	(syborg_serial_register): Add savevm.
+	* hw/syborg_pointer.c (syborg_pointer_save, syborg_pointer_load): New.
+	(syborg_pointer_register): Add savevm.
+	* hw/syborg_rtc.c (syborg_rtc_save, syborg_rtc_load): New.
+	(syborg_rtc_register): Add savevm.
+	* hw/syborg_keyboard.c (syborg_keyboard_save, syborg_keyboard_save):
+	New.
+	(syborg_keyboard_load): Add savevm.
+	* hw/syborg_timer.c (syborg_timer_save, syborg_timer_load): New.
+	(syborg_timer_register): Add savevm.
+	* hw/syborg_fb.c (syborg_fb_save, syborg_fb_load): New.
+	(syborg_fb_register): Add savevm.
+	* hw/fb_render_engine.c (qemu_put_render_data, qemu_get_render_data):
+	New.
+	* hw/fb_render_engine.h (qemu_put_render_data, qemu_get_render_data):
+	Add prototypes.
+	* hw/syborg_interrupt.c (syborg_int_save, syborg_int_load): New.
+	(syborg_interrupt_register): Add savevm.
+	* hw/syborg_hostfs.c (hostfs_handle_cache): Add is_fd.
+	(add_file_cache_entry, add_dir_cache_entry): Set is_fd.
+	(get_file_cache_entry, get_dir_cache_entry): Check is_fd.
+	(syborg_hostfs_reset, syborg_hostfs_save, syborg_hostfs_load): New.
+	(syborg_hostfs_create): Add savevm.
+	* hw/syborg_platform.c (syborg_platform_create): Add comment.
+	* target-arm/machine.c (cpu_save): Save cp15.c0_cssel, teecr and
+	teehbr.
+	(cpu_load): Load cp15.c0_cssel, teecr and teehbr.
+
+2009-01-15  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_hostfs.c (decode_error): Fix preprocessor warnings.
+	(hostfs_file_open): Fix linux build.
+
+2009-01-15  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (DEVICES): Add syborg_hostfs.
+	* boards/syborg.dts: Fix base address of 4th serial port.
+	Add hostfs device.
+	* devtree.c (qdev_get_property_string): New function.
+	* devtree.h (qdev_get_property_string): Add prototype.
+	* hw/syborg.h (SYBORG_ID_HOSTFS): Define.
+	* hw/syborg_svphostfs.c: Remove.
+	* hw/syborg_hostfs.c: New file.
+
+2009-01-14  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (DEVICE_OBJS): Set.  Add special CPPFLAGS.
+	* devtree.c (qdev_create): Make static.
+	* devtree.h (DEVICE_NAME_register): Add prototype.
+	* hw/syborg_serial.c (syborg_serial_create): Make static.
+	* hw/syborg_fb.c (syborg_fb_create): Make static.
+	* hw/syborg_platform.c (syborg_platform_create): Make static.
+
+2008-12-31  Paul Brook  <paul@codesourcery.com>
+
+	* hw/fb_render_engine.c (calc_dest_row_address): Make row signed so
+	that offset caculation is extended correctly.
+
+2008-12-30  Paul Brook  <paul@codesourcery.com>
+
+	* hw/arm_pic.c (arm_cpu_reset_dev): Add parentheses.
+
+2008-12-15  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg.txt: Remove (superseded by svp-docs).
+
+2008-12-15  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg.txt: Fix typos.
+
+2008-12-12  Daniel Gutson  <dgutson@codesourcery.com>
+
+	* hw/syborg_fb.c (syborg_fb_apply_resize): Deleted.
+	(syborg_fb_write): Changed to call console_render.
+	* hw/fb_render_engine.c (console_render): New.
+	* hw/fb_render_engine.h (get_screen_width): Declaration deleted.
+	(get_screen_height): Likewise.
+	(console_render): New declaration. 
+
+2008-12-11  Daniel Gutson  <dgutson@codesourcery.com>
+
+	* hw/fb_render_template.h (fb_draw_line15_*): Fixed bit handling.
+	(fb_draw_line16_*): Pixel swapping removed.
+	* hw/fb_render_engine.c (update_complete_palette): Fixed palette lengths.
+	Update palette 0 too.
+	(update_rotation_data): Fixed the dest_start_offset calculus.
+
+2008-12-10  Paul Brook  <paul@codesourcery.com>
+
+	* hw/arm_pic.c (arm_cpu_reset_dev): New function.
+	(arm_cpu_create): Initialize loop counter.  Use cpu_arm_init.
+	(cpu_device_register): Add cp15 cache id properties.
+	* cpu-defs.h (CPU_COMMON): Add qdev;
+	* target-arm/helper.c (cpu_reset_model_id): Set cache ID registers.
+	(cpu_reset): Call arm_cpu_reset_dev.
+	(cpu_arm_init): Add dev argument.
+	(set_cp15): Implement cssel register.
+	(get_cp15): Implement armv7 cache ID registers properly.
+	* target-arm/cpu.h (CPUARMState): Add cp15.c0_ccsid, cp15.c0_clid and
+	cp15.c0_cssel.
+	(cpu_arm_init): Update prototype.
+	(arm_cpu_reset_dev): Add prototype.
+	(cpu_init): Add additional NULL arguent.
+
+2008-12-09  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_serial.c (FIFO_SIZE): Remove.  Use s->fifo_size instead.
+	(SERIAL_FIFO_SIZE): Define.
+	(syborg_serial_state): Add fifo_size.  Make read_fifo a pointer.
+	(syborg_serial_read): Handle SERIAL_FIFO_SIZE.
+	(syborg_serial_create): Allocate FIFO.
+	(syborg_serial_init): Ditto.
+	(syborg_serial_register): Add fifo-size property.
+	* hw/syborg_pointer.c (FIFO_SIZE): Remove.  Use s->fifo_size instead.
+	(POINTER_FIFO_SIZE): Define.
+	(syborg_pointer_state): Add fifo_size.  Make event_fifo a pointer.
+	(syborg_pointer_read): Handle POINTER_FIFO_SIZE.
+	(syborg_pointer_create): Allocate FIFO.
+	(syborg_pointer_init): Ditto.
+	(syborg_pointer_register): Add fifo-size property.
+	* hw/syborg_keyboard.c (FIFO_SIZE): Remove.  Use s->fifo_size instead.
+	(KBD_FIFO_SIZE): Define.
+	(syborg_keyboard_state): Add fifo_size.  Make key_fifo a pointer.
+	(syborg_keyboard_read): Handle KBD_FIFO_SIZE.
+	(syborg_keyboard_create): Allocate FIFO.
+	(syborg_keyboard_init): Ditto.
+	(syborg_keyboard_register): Add fifo-size property.
+	* syborg.txt: Document new fifo-size properties and registers.
+
+2008-12-04  Paul Brook  <paul@codesourcery.com>
+
+	* libfdt/libfdt_env.h: Use bswap.h and WORDS_BIGENDIAN.
+	* libfdt/patch.libfdt: New file.
+	* Makefile: Fix out of tree builds.  Append -Ilibfdt to CPPFLAGS.
+
+2008-12-02  Paul Brook  <paul@codesourcery.com>
+
+	* devtree.c (devtree_ram_map, devtree_ram_map_size): New.
+	(check_cells): New function.
+	(create_from_node): Use it.
+	(create_ram): Use check_cells.  Build ram map.
+	(check_interrupt_cells): New function.
+	(find_interrupt_parent): Use check_cells and check_interrupt_cells.
+	(devtree_get_config_int): New fuction.
+	(devtree_machine_init): Update cpu_bootstrap call.
+	* devtree.h (devtree_ram_region): New.
+	(devtree_ram_map, devtree_ram_map_size): Declare.
+	(devtree_get_config_int): New prototype.
+	(cpu_bootstrap): Update prototype.
+	* hw/arm_boot.c (cpu_bootstrap): Get parameters from device tree.
+
+2008-12-02  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (ram_load_v1, ram_save_block, ram_load_dead, ram_load): Use
+	host ram access helpers.
+	(main): Only allocate RAM when kqemu_allowed.
+	* sysemu.h ((kqemu_allowed): Move ...
+	* qemu-common.h (kqemu_allowed): ... to here.
+	* exec.c (phys_ram_base): Remove.
+	(cpu_physical_memory_reset_dirty, tlb_update_dirty,
+	tlb_set_page_exec): Use host ram access helpers.
+	(get_ram_offset_phys, host_ram_addr, ram_offset_from_host): New
+	functions.
+	(kqemu_phys_ram_base): New.
+	(qemu_ram_alloc): Allocate ram on the fly.
+	(io_mem_init): Only allocate RAM when kqemu_allowed.
+	(notdirty_mem_writeb, notdirty_mem_writew, notdirty_mem_writel,
+	cpu_physical_memory_rw, cpu_physical_memory_rw,
+	cpu_physical_memory_write_rom, ldl_phys, ldq_phys, stq_phys_notdirty,
+	stl_phys): Use host ram access helpers.
+	* devtree.c (create_ram): Use qemu_ram_alloc.
+	* hw/syborg.c (syborg_init): Use qemu_ram_alloc.
+	* exec-all.h (get_phys_addr_code): Use host ram access helpers.
+	* hw/nseries.c (n8x0_init): Ditto.
+	* hw/armv7m.c (armv7m_init): Ditto.
+	* hw/soc_dma.h (soc_dma_port_add_mem_ram): Ditto.
+	* hw/pl110.c (pl110_update_display): Ditto.
+	* hw/palm.c (palmte_init): Ditto.
+	* hw/pflash_cfi01.c (pflash_cfi01_register): Ditto.
+	* hw/arm_boot.c (arm_load_kernel): Ditto.
+	* hw/omap_lcdc.c (omap_update_displaym, omap_lcd_update): Ditto.
+	* hw/pflash_cfi02.c (pflash_cfi02_register): Ditto.
+	* hw/zaurus.c (sl_bootparam_write): Ditto.
+	* hw/onenand.c (onenand_init): Ditto.
+	* hw/pc.c (pc_init1): Ditto.
+	* hw/pxa2xx_lcd.c (pxa2xx_descriptor_load,
+	pxa2xx_lcdc_dma0_redraw_horiz, pxa2xx_lcdc_dma0_redraw_vert,
+	pxa2xx_update_display): Ditto.
+	* hw/musicpal.c (target2host_addr, host2target_addr): Ditto.
+	* cpu-all.h (host_ram_addr, ram_offset_from_host,
+	get_ram_offset_phys): Add prototypes.
+	(phys_ram_base): Remove.
+	(kqemu_phys_ram_base): Declare.
+	* kqemu.c (kqemu_init): Use kqemu_phys_ram_base.
+	* hw/fb_render_engine.c (calc_src_row_address): Map physial address to
+	ram offset.
+	(render): Use host ram access helpers.
+
+2008-12-02  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (DEVICES): Set.
+	(OBJS): Use DEVICES.  Add devices.o and devtree.o.
+	(devices.c): New rule.
+	* libfdt/: Import libfdt.
+	* gen_devices.sh: New file.
+	* console.h (global_display_state): Declare.
+	* vl.c (global_display_state): Define.
+	(find_machine): Try a device tree file.
+	* boards/syborg.dts: New.
+	* Makefile: Add libfdt.
+	* devtree.c: New file.
+	* devtree.h: New file.
+	* hw/syborg_serial.c (syborg_serial_create, syborg_serial_register):
+	New fuctions.
+	* hw/arm_boot.c (cpu_bootstrap): New function.
+	* hw/syborg_pointer.c (syborg_pointer_create,
+	syborg_pointer_register): New functions.
+	* hw/syborg_rtc.c (syborg_rtc_create, syborg_rtc_register): New
+	functions.
+	* hw/syborg_keyboard.c (syborg_keyboard_create,
+	syborg_keyboard_register): New functions.
+	* hw/syborg_timer.c (syborg_timer_create, syborg_timer_register): New
+	functions.
+	* hw/arm_pic.c (arm_cpu_create, cpu_device_register): New functions.
+	* hw/syborg_fb.c (syborg_fb_create, syborg_fb_register): New
+	functions.
+	* hw/syborg_interrupt.c (syborg_int_create,
+	syborg_interrupt_register): New functions.
+	* hw/syborg.txt: Document platform device and device tree properties.
+	* hw/syborg.h (SYBORG_ID_PLATFORM): Define.
+	* hw/boards.h (devtree_machine): Declare.
+	* hw/syborg_platform.c: New file.
+
+2008-11-28  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_fb2.c: Rename...
+	* hw/syborg_fb.c: ... to this.  Replace old implementation.
+	* Makefile.target (OBJS): Update to match.
+
+2008-11-26  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_serial.c: Add debug code.
+
+2008-11-18  Paul Brook  <paul@codesourcery.com>
+	Daniel Gutson  <dgutson@codesourcery.com>  
+
+	* hw/fb_render_decl.h: New file.
+	* hw/fb_render_def.h: New file.
+	* hw/fb_render_template.h: Move code to new headers.  Implement
+	arbitrary stride for rotation.  Implment 15bpp and 24bpp.
+	* hw/syborg_fb2.c: Remove OLD_ROM hacks.  Enable device when FB_BASE
+	set in compatibility mode.  Rename FB_ROTATION to FB_ORIENTATION.
+	* hw/syborg.txt: Update framebuffer documentation.
+	* hw/syborg.c (syborg_init): Create old framebuffers.
+	* hw/syborg.h (syborg_fb_init): Update prototype.
+	* hw/fb_render_engine.c: Use new headers.  Rename rotation to
+	orientation.
+	(get_screen_width): New function.
+	(get_screen_height): New function.
+	(calc_bytes_per_src_row): Handle 15bpp and 24bpp.
+	(get_draw_fn): Use new table.
+	(calc_dest_row_direction): Remove.
+	(update_palette1): Remove.  Merge code...
+	(update_complete_palette): ... to here.
+	(using_palette): Remove.
+	(rotations): New.
+	(update_rotation_data): New function.
+	(update_render_data): Use update_rotation_data.
+	(set_palette_value): Trigger full update.
+	(render_blank_screen): New function.
+	(render): Handle rotation.
+	* hw/fb_render_engine.h (fb_rotation): Add flipped values.
+	(get_screen_width): Add prototype.
+	(get_screen_height): Add prototype.
+
+2008-11-13  Daniel Gutson  <daniel@codesourcery.com>
+
+	* hw/pl110_template.h (pl110_draw_line32_*): Byteswapping fixed.
+
+2008-11-13  Daniel Gutson  <daniel@codesourcery.com>
+
+	* hw/fb_render_template.h (fb_draw_line32_*): Byteswapping fixed.
+
+2008-11-13  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_keyboard.c (syborg_keyboard_read): Fix empty FIFO test.
+	(syborg_keyboard_event): Push correct value to FIFO.
+
+2008-11-12  Daniel Gutson <dgutson@codesourcery.com>
+
+	* hw/syborg_fb2 (syborg_fb_update): Use qemu_int_raise/lower instead
+	of qemu_set_irq to fix irq level bug).
+	(syborg_fb_init): Framebuffer device starts disabled.
+
+2008-11-10  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_fb2.c (syborg_fb_init): Remove bogus base set.
+
+2008-11-10  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg_fb2.c (OLD_ROM): Don't define.
+	(syborg_fb_read, syborg_fb_write): Isolate guest from implementation
+	details.
+
+2008-11-10  Paul Brook  <paul@codesourcery.com>
+
+	* hw/fb_render_engine.c: Fix host/target address confusion.
+
+2008-11-10  Paul Brook  <paul@codesourcery.com>
+
+	* syborg.txt: Document that IRQ0 is unused.
+
+2008-11-10  Daniel Gutson  <dgutson@codesourcery.com>
+
+	* Makefile.target (OBJS): Add syborg_fb2.o, fb_render_engine.o
+	* hw/syborg.txt: Document framebuffer device.
+	* hw/syborg_fb2: New file.
+	* hw/fb_render_engine.c: New file.
+	* hw/fb_render_engine.h: New file.
+	* hw/fb_render_template.h: New file.
+	* hw/syborg.h: Add framebuffer device ID.
+
+2008-11-10  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg.txt: Spelling fixes.
+
+2008-11-10  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg.txt: Document serial port DMA.
+	* hw/syborg_serial.c (SERIAL_DMA_TX_ADDR, SERIAL_DMA_TX_COUNT,
+	SERIAL_DMA_RX_ADDR, SERIAL_DMA_RX_COUNT, SERIAL_INT_FIFO,
+	SERIAL_INT_DMA_TX, SERIAL_INT_DMA_RX): Define.
+	(syborg_serial_state): Add dma_tx_ptr, dma_rx_ptr and dma_rx_size.
+	(syborg_serial_update): Add DMA interrupts.
+	(fifo_pop): New function.
+	(fifo_push): New function.
+	(do_dma_tx): New function.
+	(dma_rx_start): New function.
+	(syborg_serial_read): Use fifo_pop.  Implement DMA registers.
+	(syborg_serial_write): Implement DMA registers.
+	(syborg_serial_can_receive): Handle DMA.
+	(syborg_serial_receive): Ditto.
+
+2008-11-08  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg.txt: Tweak keyboard and serial controller docs.
+
+2008-11-07  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (OBJS): Add syborg_pointer.o.
+	* hw/syborg.txt: Add base board description and pointer device.
+	* hw/syborg.c (syborg_init): Use new touchscreen.
+	* hw/syborg.h (syborg_touchscreen_init): Add prototype.
+	(syborg_mouse_init): Add prototype.
+	(SYBORG_ID_MOUSE, SYBORG_ID_TOUCHSCREEN): Define.
+	* hw/syborg_mouse.c: Mark as obsolete.
+
+2008-11-07  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/helper.c (get_cp15): Report sane cache size.
+
+2008-11-07  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target: Add old syborg devices.
+	* hw/syborg.txt: Suport both old and new device models.
+	* hw/syborg.h: Add old devices and new device IDs.
+	* hw/syborg.txt: New file.
+	* hw/syborg_rtc.c: New file.
+	* hw/syborg_keyboard.c: Rewrite.
+	* hw/syborg_timer.c: Ditto.
+	* hw/syborg_serial.c: Ditto.
+	* hw/syborg_interrupt.c: Ditto.
+	* hw/syborg_keyboard_old.c: Move old device here.
+	* hw/syborg_timer_old.c: Ditto.
+	* hw/syborg_serial_old.c: Ditto.
+	* hw/syborg_interrupt_old.c: Ditto.
+	* hw/boards.h: Add oldsyborg_machine.
+	* target-arm/machine.c: Ditto.
+
+2008-11-05  Paul Brook  <paul@codesourcery.com>
+
+	* hw/syborg.c (syborg_state_s, syborg_cp14_read, syborg_cp14_write):
+	Remove.
+	(syborg_init): Remove cp14 hacks.
+	* target-arm/helper.c (cpu_reset_model_id): Set ARM_FEATURE_THUMB2EE.
+	(set_teecr): New helper.
+	* target-arm/helpers.h: Add set_teecr.
+	* target-arm/cpu.h (CPUARMState): Add teecr and teehbr.
+	(arm_features): Add ARM_FEATURE_THUMB2EE.
+	* target-arm/translate.c (disas_cp14_read): New function.
+	(disas_cp14_write): New function.
+	(disas_coproc_insn): Handle cp14 instructions.
+
+2008-11-05  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/translate.c (disas_vfp_insn): Fix translation of VFP
+	fixed point conversion routines.
+	* target-arm/helper.c (VFP_CONV_FIX): Negate shift count.
+
+2008-11-05  Paul Brook  <paul@codesourcery.com>
+
+	* fpu/softfloat.c (float32_scalbn, float64_scalbn, float128_scalbn):
+	Correctly normalize values and handle zero inputs.
+
+2008-11-03  Paul Brook  <paul@codesourcery.com>
+
+	* fpu/softfloat.c (roundAndPackFloat32, roundAndPackFloat64,
+	roundAndPackFloatx80, roundAndPackFloat128, addFloat32Sigs,
+	addFloat64Sigs, addFloat128Sigs): Add flush to zero for denormal
+	results.
+	* fpu/softfloat.h (float_status): Add flush_to_zero and
+	default_nan_mode.
+	(set_flush_to_zero): New function.
+	(set_default_nan_mode): New function.
+	* fpu/softfloat-specialize.h (float32_default_nan,
+	float64_default_nan): Use correct value for ARM.
+	(propagateFloat32NaN, propagateFloat64NaN, propagateFloatx80NaN,
+	propagateFloat64NaN): Implement default NaN mode.
+	* target-arm/helper.c (vfp_set_fpscr): Implement FZ and DN bits.
+
+2008-11-03  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/translate.c (disas_vfp_insn): Fix order of operations for
+	fnmsc.
+
+2008-11-03  Paul Brook  <paul@codesourcery.com>
+
+	* cpu-exec.c (cpu_resume_from_signal): Reset env->exception_index.
+
+2008-11-03  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/helper.c (check_ap): Implement ARMv7 AP check.
+	(get_phys_addr_v6): Implement ARMv7 simplified AP model.
+
+2008-11-03  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/translate.c (gen_vfp_st): Fix typo.
+
+2008-10-31  Paul Brook  <paul@codesourcery.com>
+
+	* configure: Add --sdl-config.
+
+2008-10-31  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/op_helper.c (ALIGNED_ONLY): Define.
+	(do_restore_state): New function.
+	(do_unaligned_access): New function.
+	(tlb_fill): Use do_restore_state.
+	* target-arm/translate.c (gen_vfp_ld): Split doubleword VFP loads.
+	(gen_vfp_st): Split doubleword VFP stores.
+
+2009-01-15  Paul Brook  <paul@codesourcery.com>
+
+	* gdbstub.c (gdbserver_start): Fix merge breakage.
+
+2009-01-15  Paul Brook  <paul@codesourcery.com>
+
+	* qemu-char.c (qemu_chr_open): Remove stray code from stdio changes.
+
+2008-12-30  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/neon_helper.c (rshl): Fix typo.
+
+2008-12-30  Paul Brook  <paul@codesourcery.com>
+
+	* qemu-char.c: Restore stdio handling lost in merge.
+
+2008-12-28  Paul Brook  <paul@codesourcery.com>
+
+	* configure: Use stub host USB on mingw32.
+	* qemu-sockets.c (gai_strerror): Provide definition for old mingw32.
+
+2008-12-03  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* hw/dummy_ppc.c (dummy_ppc_machine): Use C99-style initializers.
+	Initialize max_cpus.
+
+2008-12-02  Daniel Jacobowitz  <dan@codesourcery.com>
+
+	* linux-user/syscall.c (do_syscall): Check gdb_wrapper for ptrace
+	emulation.
+	* linux-user/main.c (gdb_wrapper): New variable.
+	(usage): Display -wrapper.
+	(main): Handle -wrapper.
+	* gdbstub.c (gdb_queuesig): Always queue signals for -wrapper.
+	(gdb_handlesig): Start the server at the first signal for -wrapper.
+	* linux-user/qemu.h (gdb_wrapper): Declare.
+
+2008-12-02  Daniel Jacobowitz  <dan@codesourcery.com>
+
+	Issue #4298
+	* release-notes-csl.xml: Document fork and signal fixes.
+
+	* linux-user/syscall.c (do_fork): Call fork_end for non-NPTL also.
+	* linux-user/signal.c (signal_init): Register handler for all fatal
+	signals.
+	(force_sig): Report fatal signals to GDB.
+	(queue_signal): Use gdb_queuesig.
+	(host_signal_handler): Only report kernel-generated SIGSEGV / SIGBUS
+	as exceptions.
+	(do_sigaction): Do not restore SIG_DFL for fatal signals.
+	(process_pending_signals): Handle cancelled signals.
+	* linux-user/main.c (fork_end): Call gdbserver_fork for non-NPTL also.
+	* gdbstub.c (SIGTRAP, SIGINT): Remove definitions.
+	(GDB_SIGNAL_0, GDB_SIGNAL_INT, GDB_SIGNAL_TRAP, GDB_SIGNAL_UNKNOWN): New
+	constants.
+	(gdb_signal_table, target_signal_to_gdb, gdb_signal_to_target): New.
+	(gdb_handle_packet): Use GDB_SIGNAL_TRAP and gdb_signal_to_target.
+	Clear the saved signal on a 'c' packet.
+	(gdb_vm_stopped): Use GDB_SIGNAL_TRAP and GDB_SIGNAL_INT.
+	(gdb_signalled, gdb_queuesig): New.
+	(gdb_handlesig): Use target_signal_to_gdb.
+	* gdbstub.h (gdb_signalled, gdb_queuesig): Declare.
+
+2008-11-12  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* linux-user/syscall.c (do_syscall):  Make #ifdef on
+	TARGET_NR_inotify_init, TARGET_NR_inotify_add_watch, and
+	TARGET_NR_inotify_rm_watch cases match that used previously 
+	in the file, to avoid references to undefined symbols.
+
+2008-10-29  Paul Brook  <paul@codesourcery.com>
+
+	* configure: Use CFLAGS and LDFLAGS in link tests.
+
+2008-10-29  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream.
+	* qemu-tool.c (qemu_get_clock): Use qemu_gettimeofday.
+
+2008-10-29  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream.
+	* vl.c (qemu_announce_self): Remove bogus TAP check.
+	* configure: Use proper windows paths.
+	* migration-tcp.c: Use proper socket functions.
+
+2008-10-29  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/helper.c (cpu_reset_model_id): Use proper v7 CacheType
+	value.
+
+2008-10-28  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/helper.c (check_ap): Add hack to make VMSAv7 attributes
+	work.
+
+2008-10-28  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (OBJS): Add syborg files.
+	* hw/boards.h (syborg_machine): Declare.
+	* target-arm/machine.c (register_machines): Add syborg_machine.
+	* hw/syborg.c: New file
+	* hw/syborg_dummy.c: New file
+	* hw/syborg_fb.c: New file
+	* hw/syborg.h: New file
+	* hw/syborg_interrupt.c: New file
+	* hw/syborg_keyboard.c: New file
+	* hw/syborg_mouse.c: New file
+	* hw/syborg_serial.c: New file
+	* hw/syborg_svphostfs.c: New file
+	* hw/syborg_svpsnap.c: New file
+	* hw/syborg_timer.c: New file
+
+2008-10-28  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/helper.c (cpu_reset_model_id): Add A8 cache info hacks.
+	(get_cp15): Ditto.
+
+2008-10-28  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream.
+	* usb-linux.c (usb_linux_update_endp_table): Use usb_ctrltransfer.
+
+2008-10-28  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/helper.c (set_cp15): Remove stray debugging printf.
+
+2008-10-24  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/helper.c (do_interrupt): Use VBAR.
+	(set_cp15): Implement cp15 c12 (vector base address register).
+	(get_cp15): Ditto.
+	* target-arm/cpu.h (CPUARMState): Add cp15.c12_vbar.
+
+2008-10-20  Daniel Jacobowitz  <dan@codesourcery.com>
+
+	Issue #3871
+	* release-notes-csl.xml: Document.
+
+	* target-ppc/translate.c (gen_bcond): Do not update NIP to the
+	fallthrough address when single stepping.
+
+2008-10-20  Daniel Jacobowitz  <dan@codesourcery.com>
+
+	Issue #4075
+	* release-notes-csl.xml: Document.
+
+	* i386.ld, x86_64.ld: Add .reserved2.
+	* linux-user/main.c (RESERVED_SEGMENT_START, RESERVED_SEGMENT_SIZE):
+	Adjust for PPC target.
+	(RESERVED2_SEGMENT_START, RESERVED2_SEGMENT_SIZE): New.  Use to
+	create .reserved2.
+	(main): Unmap both reserved segments.
+
+2008-10-15  Daniel Jacobowitz  <dan@codesourcery.com>
+
+	* release-notes-csl.xml: Correct typos in AltiVec note.
+	Remove AltiVec from Linux-specific note.
+
+2008-10-06  Andrew Stubbs  <ams@codesourcery.com>
+
+	Issue #3871
+
+	* linux-user/main.c (cpu_loop): Handle EXCP_DEBUG signal.
+
+2008-10-03  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* release-notes-csl.xml (AltiVec instruction support): New note.
+	* target-ppc/cpu.h (union ppc_avr_t): Add s8, s16, s32, s64, and
+	f fields.
+	(VSCR_NJ, VSCR_SAT, vscr_nj, vcsr_sat): Define.
+	* target-ppc/op_mem.h: Fix lvx and stvx implementations.
+	Add element-wise Altivec load and store instructions.  Unify
+	definitions for 32-bit and 64-bit targets.
+	* target-ppc/op.c: Add ops for Altivec instructions.
+	* target-ppc/translate.c (SIMM5, UIMM5, VSH): Define.
+	Add translators for Altivec instructions.
+	* target-ppc/op_helper.h: Add prototypes for Altivec instruction
+	helpers.
+	* target-ppc/op_helper.c: Add helpers for Altivec instructions.
+
+2008-10-02  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* release-notes-csl.xml (Additional CPU emulations for QEMU): Tweak
+	to mention e500 --cpu options.
+	* target-ppc/translate.c (mbar): Correct opc3 field.
+	* target-ppc/translate_init.c (spr_read_spefscr, spr_write_spefscr):
+	New functions.
+	(init_proc_e200): Use them.  Add read/write access in user mode too.
+	(init_proc_e500): Likewise.
+	* target-ppc/op.c (op_load_spefscr, op_store_spefscr): New functions.
+
+2008-09-30  Catherine Moore  <clm@codesourcery.com>
+
+	Merge:
+	r219891 (orig r5139):  ths | 2008-09-02 10:39:45 -0700
+	* target-mips/translate_init.c (no_mmu_init): Only if
+	not CONFIG_USER_ONLY.
+	(cpu_mips_register): Initialize mmu if not CONFIG_USER_ONLY.
+
+2008-09-29  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* target-ppc/translate.c (rlwimi): Remove bogus case.
+	* target-ppc/op_helper.c (do_addmeo, do_addmeo_64): Don't set
+	xer_ca when T0 == 0
+	(do_subfmeo): Likewise, for T0 == UINT32_MAX.
+	(do_subfemo_64): Likewise, for T0 == UINT64_MAX.
+	(do_sraw, do_srad): Correctly set xer_ca.
+	(do_mullwo): Cast T0 and T1 to int32_t first.
+	* target-ppc/op.c (op_add_me): Don't set xer_ca when T0 == 0
+	(op_add_me_64): Likewise.
+	(op_subfme): Don't set xer_ca when T0 == UINT32_MAX.
+	(op_subfme_64): Likewise, for UINT64_MAX.
+	(op_addmeo): Set T1 to xer_ca.
+
+2008-09-26  Julian Brown  <julian@codesourcery.com>
+
+	* release-notes-csl.xml (Improvements to NEON support in QEMU): Add
+	note.
+
+2008-09-25  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* release-notes-csl.xml (-cpu now enables CPU-specific instructions):
+	New note.
+	* target-ppc/helper.c (cpu_ppc_reset): Turn on CPU instruction
+	capability bits.
+
+2008-09-24  Paul Brook  <paul@codesourcery.com>
+
+	* fpu/softfloat.c (float32_to_float16): Fix rounding of very small
+	values.
+
+2008-09-22  Julian Brown  <julian@codesourcery.com>
+
+	* target-arm/neon_helper.c (shl_u8, shl_u16, shl_u32): Fix
+	greater-than-element-size boundary condition.
+	(shl_s8, shl_s16, shl_s32): Likewise.
+	(rshl_s8, rshl_s16, rshl_s32, rshl_u8, rshl_u16, rshl_u32)
+	(qshl_s8, qshl_s16, qshl_s32, qshl_u8, qshl_u16, qshl_u32): Add
+	casts to uses of -sizeof(), fix boundary conditions.
+
+2008-09-22  Paul Brook  <paul@codesourcery.com>
+
+	* exec-all.h (MAX_OP_PER_INSTR): Increase to 200.
+
+2008-09-22  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/translate.c (disas_neon_ls_insn): Remove redundant mask
+	operations in vld1 code.
+
+2008-09-22  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/main.c (fork_end): Call gdbserver_fork.
+	* gdbstub.c (gdbserver_fork): New function.
+	* gdbstub.h (gdbserver_fork): Add prototype.
+
+2008-09-21  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream.
+	* target-arm/op_helper.c (neon_tbl): Fix shift count.
+	* target-arm/translate.c (target-arm/translate.c): Fix incorrect
+	register writeback for VDUP, VLD1(duplicate) and VTBL instructions.
+
+2008-09-21  Paul Brook  <paul@codesourcery.com>
+
+	* fpu/softfloat.c (packFloat16, float16_to_float32,
+	float32_to_float16): New functions.
+	* fpu/softfloat.h (float16_to_float32, float32_to_float16): Add
+	prototypes.
+	* target-arm/helper.c (cpu_reset_model_id): Add FP16 to "any" cpu.
+	(vfp_fcvt_f16_to_f32, vfp_fcvt_f32_to_f16): New helpers.
+	* target-arm/helpers.h (vfp_fcvt_f16_to_f32, vfp_fcvt_f32_to_f16):
+	New helpers.
+	* target-arm/cpu.h (arm_features): Add ARM_FEATURE_FP16.
+	* target-arm/translate.c (disas_vfp_insn): Add vcvth and vcvtb.
+	(disas_neon_data_insn): Add vcvt.f16.f32 and vcvt.f32.f16.
+
+2008-09-19  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* target-ppc/op_template.h (op_load_crfr_T0_crf): New function.
+	* target-ppc/op_helper.c (do_fcmpu): Correctly set CR register
+	for comparisons against NaN.
+	(do_fcmpo): Likewise.
+	* target-ppc/translate.c (gen_op_load_crfr_T0): New table.
+	(fcmpo): Pass along the condition register being set.
+	(fcmpu): Likewise.
+
+2008-09-11  Sandra Loosemore  <sandra@codesourcery.com>
+
+	Issue #2978
+
+	* release-notes-csl.xml (Kernel version reported by QEMU): New note.
+
+2008-09-11  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream:
+	* i386-dis.c (oappend): Fix bogus pstrcpy.
+
+2008-09-05  Nathan Sidwell  <nathan@codesourcery.com>
+
+	Issue #2978
+	* linux-user/main.c (usage): Add -r option.
+	* qemu-doc.texi (Linux User space emulator): Document -r option.
+
+2008-09-05  Paul Brook  <paul@codesourcery.com>
+
+	* target-m68k/translate.c (mvzs): Fix sign extension logic.
+
+2008-09-04  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* ppc-semi.c (HOSTED_ISATTY): Redefine.
+	(ppc_isatty_cb): New function.
+	(do_ppc_semihosting): Follow system call conventions in result.
+
+2008-09-01  Mark Mitchell  <mark@codesourcery.com>
+
+	* qemu-common.h (uninterrupted_open): Declare.
+	(uninterrupted_close): Likewise.
+	(uninterrupted_read): Likewise.
+	(uninterrupted_write): Likewise.
+	* cutils.c (uninterrupted_open): Define.
+	(uninterrupted_close): Likewise.
+	(uninterrupted_read): Likewise.
+	(uninterrupted_write): Likewise.
+	* arm-semi.c (do_arm_semihosting): Use them.
+	* ppc-semi.c (do_ppc_semihosting): Likewise.
+	* m68k-semi.c (do_m68k_semihosting): Likewise.
+
+2008-08-31  Mark Mitchell  <mark@codesourcery.com>
+
+	* arm-semi.c (do_arm_semihosting): Check for EINTR on calls to
+	open, read, write, and close.
+	* ppc-semi.c (do_ppc_semihosting): Likewise.
+	* m68k-semi.c (do_m68k_semihosting): Likewise.
+
+2008-08-27  Paul Brook  <paul@codesourcery.com>
+
+	* configure: Allow unknown configure options (again).
+
+2008-05-27  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream.
+	* linux-user/syscall.c: Include linux_loop.h.
+	* linux-user/linux_loop.h: New file, avoid problems with old kernel
+	headers.
+
+2008-05-23  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/elfload.c (load_elf_binary): Set info->e_flags.
+	* linux-user/qemu.h (image_info): Add elf_flags.
+	* linux-user/main.c (cpu_loop): Byteswap instructions.
+	(main): Enable code byteswapping for BE8 binaries.
+	* disas.c (target_disas): Add flags for byteswapping.
+	* target-arm/cpu.h (CPUARMState): Add bswap_code.
+	* target-arm/translate.c (disas_arm_insn, disas_thumb2_insn,
+	disas_thumb_insn): Byteswap instructions.
+	(gen_intermediate_code_internal): Pass bswap flag to target_disas.
+
+2008-05-23  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/main.c (do_kernel_trap): Use proper guest memory access
+	routines.
+
+2008-04-06  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* ppc-semi.c (HOSTED_UNLINK, HOSTED_STAT, HOSTED_LSTAT, HOSTED_FSTAT,
+	HOSTED_ISATTY, HOSTED_SYSTEM, HOSTED_RENAME): Define.
+	(translate_stat): Remove and replace with...
+	(translate_to_netbsd_stat): ..this.  New function.
+	(ppc_stat_cb): New function.
+	(do_ppc_semihosting): Add HOSTED_UNLINK, HOSTED_STAT, HOSTED_LSTAT,
+	HOSTED_FSTAT, HOSTED_RENAME, HOSTED_ISATTY, and HOSTED_SYSTEM cases.
+	Fix HOSTED_LSTAT.  Use ppc_stat_cb for HOSTED_STAT and HOSTED_FSTAT.
+
+2008-03-27  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* target-m68k/helper.c (m68k_cpu_list): New.
+	* target-m68i/cpu.h (m68k_cpu_list): Declare.
+	(cpu_list): Define to use new function.
+
+2008-03-26  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream.
+	* linux-user/elfload.c (create_elf_tables): Add AT_CLKTCK.
+
+2008-03-26  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream.
+	* vl.c (main): Convert fixed length commandline buffers to pointers.
+
+2008-03-26  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/main.c (print_version): New function.
+	(usage): Use it.  Add retcode and QEMU_BUGURL.
+	(main): Handle --help and --version.
+	* vl.c (version): Update Copyright.
+
+2008-03-26  Paul Brook  <paul@codesourcery.com>
+
+	* target-m68k/op.c (set_T0_s32): Fix typo.
+
+2008-03-25  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/elfload.c (x86_stack_size): Remove declaration.
+	(setup_arg_pages): Set info->stack_base.
+	* linux-user/syscall.c (TARGET_PROT_GROWSDOWN): Define.
+	(do_syscall): Add PROT_GROWSDOWN exec-stack hack.
+	* linux-user/qemu.h (image_info): Add stack_base.
+	(x86_stack_size): Add declaration.
+
+2008-03-25  Paul Brook  <paul@codesourcery.com>
+
+	* target-cris/cpu.h: Define MMAP_SHIFT.
+	* linux-user/syscall.c (do_syscall): Default MMAP_SHIFT=12.
+	* linux-user/main.c (cpu_loop): Fix m68k 6-arg syscall.
+
+2008-03-21  Paul Brook  <paul@codesourcery.com>
+
+	Backport from upstream.
+	* linux-user/signal.c (setup_return): Handle mode change on signal
+	entry.
+	(restore_sigcontext): Mask privileged bits.
+
+2008-03-14  Paul Brook  <paul@codesourcery.com>
+
+	* exec-all.h (MAX_OP_PER_INSTR): Increase to 64.
+
+2008-03-13  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (win_chr_stdio_poll): Correct buffer size.
+
+2008-03-07  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* release-notes-csl.xml:  Add new note for Linux user-mode emulator.
+	Further split up and tweak the notes for the QEMU CPU simulator
+	since we need to say slightly different things about how previous
+	behavior has changed on all of arm, power, and m68k.
+
+2008-03-06  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (host_alarm_handler): Handle NULL next_cpu.
+
+2008-03-06  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/main.c (main): Accept --foo as an alias for -foo.
+
+2008-02-29  Sandra Loosemore  <sandra@codesourcery.com>
+
+	* release-notes-csl.xml:  Give previous note added a unique UUID.
+
+2008-02-28  Carlos O'Donell <carlos@codesourcery.com>
+
+	* release-notes-csl.xml: Document QEMU support.
+
+2008-02-28  Daniel Jacobowitz  <dan@codesourcery.com>
+
+	Backport from trunk:
+	* vl.c (next_cpu, event_pending): New.
+	(cur_cpu): Move higher.
+	(host_alarm_handler, main_loop): Avoid missed interrupts.
+
+2008-02-26  Nathan Froyd  <froydnj@codesourcery.com>
+
+	* gdbstub.c (ldtul_p): Swap the 64-bit and 32-bit cases.
+
+2008-02-26  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (register_machines): Register dummy_ppc_machine first.
+	* gdbstub.c (cpu_gdb_read_register): Return correct FP register size.
+
+2008-02-21  Paul Brook  <paul@codesourcery.com>
+
+	* gdbstub.c (gdb_chr_can_receive): Accept blocks of data.
+
+2008-02-21  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (qemu_chr_open_stdio): Ignore SIGINT.
+	(qemu_chr_open_win_stdio): Ignore ^C.
+
+2008-01-22  Paul Brook  <paul@codesourcery.com>
+
+	* gdbstub.c (cpu_gdb_write_register): Fix comment typo.
+
+2008-01-09  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/op.c: Split env->NZF into NF and ZF.
+	* target-arm/helper.c: Ditto.
+	* target-arm/cpu.h: Ditto.
+
+2008-01-06  Paul Brook  <paul@codesourcery.com>
+
+	* configure: Re-add NPTL define.
+
+2007-12-10  Paul Brook  <paul@codesourcery.com>
+
+	* softmmu-semi.c (softmmu_target_strlen): New function.
+	(target_strlen): Ditto.
+	* Makefile.target (VL_OBJS): Add dummy_ppc.o and ppc-semi.o.
+	* ppc-semi.c: New file.
+	* vl.c (qemu_options): Enable semihosting for PPC.
+	(register_machines): Add dummy_ppc_machine.
+	* target-ppc/helper.h (powerpc_excp): Intercept semihosting syscalls.
+	* taret-ppc/cpu.h (do_ppc_semihosting): Add prototype.
+	* hw/boards.h (dummy_ppc_machine): Add declaration.
+	* hw/dummy_ppc.c: New file.
+
+2007-12-05  Paul Brook  <paul@codesourcery.com>
+
+	* x86_64.ld: Leave space for system emulation program headers.
+	* i386.ld: Ditto.
+
+2007-12-04  Paul Brook  <paul@codesourcery.com>
+
+	* x86_64.ld: Tweak .reserved section placement.
+	* i386.ld: Ditto.
+	* linux-user/main.c: Ditto.
+
+2007-11-27  Paul Brook  <paul@codesourcery.com>
+
+	* i386.ld: Add sysroot suffix to library search paths.
+
+2007-11-27  Paul Brook  <paul@codesourcery.com>
+
+	* osdep.c (localtime_r, gmtime_r): New functions.
+	* osdep.h (localtime_r, gmtime_r): Add prototypes.
+	* configure: Allow unknown configure options.
+
+2007-11-20  Paul Brook  <paul@codesourcery.com>
+
+	* target-ppc/translate_init.c (init_ppc_proc): Allow linux userspace
+	PVR read.
+
+2007-11-10  Paul Brook  <paul@codesourcery.com>
+
+	* hw/stellaris.c (GPTM_SCALE): Remove.
+	(stellaris_clock_scale): New variable.
+	(gptm_reload): Use it.
+	(pllcfg_sandstorm, pllcfg_fury): New variables.
+	(ssys_read): Implement PLLCFG.  Set reference clock speed.
+
+2007-11-10  Paul Brook  <paul@codesourcery.com>
+
+	* hw/mpcore.c (mpcore_priv_read): Fix printf format mismatch.
+	(mpcore_priv_write): Ditto.
+	* hw/arm_gic.c (gic_dist_readb, gic_dist_writeb, gic_cpu_read,
+	gic_cpu_write): Ditto.
+
+2007-11-06  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target: Add pl061.o
+	* vl.h (pl061_init): Add prototype.
+	* hw/stellaris.c (stellaris_init): Create GPIO.
+	* hw/pl061.c: New file.
+
+2007-11-06  Paul Brook  <paul@codesourcery.com>
+
+	* hw/ssd0323.c (ssd0323_xfer_ssi): Fix typo.
+	(ssd0323_cd): Add debug output.
+
+2007-11-05  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target: Add ssd0303.o, pl022.o and ssd0323.o.
+	* vl.c (register_machines): Add lm3s6965evb_machine.
+	* vl.h (armv7m_init): Add.
+	(lm3s6965evb_machine): Declare.
+	(pl022_init): New prototype.
+	(ssd0323_xfer_ssi, ssd0323_init): New prototype.
+	* hw/ssd0323.c: New file.
+	* hw/armv7m.c (armv7m_init): Remove board init code.
+	(lm3s811evb_machine): Remove.
+	* hw/osram_oled.c: Rename...
+	* hw/ssd0303.c: ... to this.
+	* hw/pl022.c: New file.
+	* hw/stellaris.c: Define and use stellaris_boards.
+	(lm3s811evb_machine, lm3s6965evb_machine): New.
+
+2007-11-04  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target: Set BASE_LDFLAGS unconditionally. Remove -shared
+	hacks.
+	* linux-user/main.c: Add .reserved section contents.
+	(main): Unmap reserved memory area.
+	* x86_64.ld: Add .reserved. Avoid SIZEOF_HEADERS.
+	* ia64.ld: Ditto.
+	* ppc.ld: Ditto.
+	* sparc.ld: Ditto.
+	* sparc64.ld: Ditto.
+	* s390.ld: Ditto.
+	* arm.ld: Ditto.
+	* m68k.ld: Ditto.
+	* i386.ld: Ditto.
+
+2007-10-18  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/translate.c (gen_intermediate_code_internal): Add
+	set_condexec calls.
+
+2007-10-18  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/translate.c (DISAS_JUMP_NEXT): Remove.
+	(DISAS_WFI, DISAS_SWI): Define.
+	(disas_cp15_insn): Use DISAS_WFI.
+	(gen_nop_hint): Ditto.
+	(disas_arm_insn): Call gen_set_condexec before raising an exception.
+	Use DISAS_SWI.
+	(disas_thumb_insn): Ditto.
+	(gen_intermediate_code_internal): Call gen_set_condexec before hitting
+	breakpoint.  Avoid translating breakpointed instruction.
+	Handle DISAS_SWI and DISAS_WFI.
+
+2007-10-16  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/main.c (show_missing_syscalls): New variable.
+	(main): Set show_missing_syscalls.
+	* linux-user/qemu.h (linux-user/qemu.h): Add prototype.
+	* linux-user/syscall.c (do_syscall): Use show_missing_syscalls.
+
+2007-10-16  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/op_neon.h (unzip_u8, zip_u8): Fix bogus masks.
+
+2007-10-16  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/syscall.c (do_fork): Disable clone(CLONE_VM) with NPTL.
+
+2007-09-22  Paul Brook  <paul@codesourcery.com>
+
+	* m68k-semi.c (do_m68k_semihosting): Call gdb_exit.
+
+2007-09-14  Paul Brook  <paul@codesourcery.com>
+
+	* target-m68k/op.c (get_op, set_op, get_opf64, set_opf64): Move...
+	* target-m68k/op_helper.c (helper_get_op, helper_set_op,
+	helper_get_opf64, helper_set_opf64): ... To here.
+
+2007-09-14  Paul Brook  <paul@codesourcery.com>
+
+	* linux-user/main.c (usage): Use QEMU_PKGVERSION.
+	* vl.c (version): New function.
+	(help): Use it.
+	(QEMU_OPTION_version): Define.
+	(qemu_options): Add version.
+	(main): Handle QEMU_OPTION_version.
+	* monitor.c (do_info_version): Use QEMU_PKGVERSION.
+	* configure: Add --with-pkgversion and --with-bugurl.
+
+2007-08-29  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/op.c (op_movl_T0_cpsr): Mask out execution state bits.
+	* target-arm/helper.c (do_interrupt): Clear env->condexec_bits, not
+	unused uncached_cpsr bits.
+	* target-arm/cpu.h (CACHED_CPSR_BITS): Add CPSR_IT.
+	(CPSR_GE, CPSR_RESERVED, CPSR_USER, CPSR_EXEC): Define.
+	(cpsr_read): Use env->GE.
+	(cpsr_write): Set env->GE.
+	* target-arm/translate.c (msr_mask): Fix reserved masks for V6/V7.
+	(disas_arm_insn): Pass env to msr_mask.
+
+2007-08-24  Paul Brook  <paul@codesourcery.com>
+
+	* gdbstub.c (cpu_gdb_write_register): Avoid setting low bit of PC.
+
+2007-08-24  Paul Brook  <paul@codesourcery.com>
+
+	* target-arm/cpu.h (do_arm_semihosting): Add prototype.
+	* target-arm/helper.c (do_interrupt): Implement Thumb BKPT semihosting.
+
+2007-07-30  Paul Brook  <paul@codesourcery.com>
+
+	Merge from //csl/qemu/branches/armv7.
+
+2007-06-19  Paul Brook  <paul@codesourcery.com>
+
+	* vl.h (dpy_update, dpy_resize): Check for NULL callbacks.
+
+2007-06-18  Paul Brook  <paul@codesourcery.com>
+
+	* vl.c (start_rtc_timer): Disable timer warning.
+
+2007-06-18  Paul Brook  <paul@codesourcery.com>
+
+	* Makefile.target (VL_OBJS): Add dummy_m68k.o.
+	* vl.c (register_machines): Add dummy_m68k_machine.
+	* vl.h (dummy_m68k_machine): Add declaration.
+	* hw/dummy_m68k.c: New file.
+
+2007-04-29  Vladimir Prus  <vladimir@codesourcery.com>
+
+	* gdbstub.h (gdb_exit): Declare unconditionally.
+	* arm-semi.c (syscall_err): New.
+	(arm_semi_cb): For system mode, assign to syscall_err.
+	(arm_semi_flen_cb): New.
+	(do_arm_semihosting): Use string length including zero
+	character for all calls that use strings.  Implement
+	SYS_FLEN in terms of fstat call.  On exit, call gdb_exit.
+	* gdbstub.c (gdbserver_state): Define unconditionally.
+	(gdb_exit): Likewise.
+	(gdbserver_start): Don't malloc gdb state, use
+	gdbserver_state.
+
+2007-04-16  Paul Brook  <paul@codesourcery.com>
+
+	* gdbstub.c (gdb_handle_packet): Allow non-core regs in g/G packets.
+
+2007-04-16  Paul Brook  <paul@codesourcery.com>
+
+	* gdbstub.h (gdb_reg_cb): New typedef.
+	(gdb_register_coprocessor): New function.
+	* feature_to_c.sh: New file.
+	* Makefile.target (OBJS, VL_OBJS): Add gdbstub-xml.o
+	(gdbstub-xml.c): New rule.
+	* configure: Set gdb_xml_files. Define TARGET_XML_FILES.
+	* target-m68k/translate.c: Include gdbstub.h.
+	(fpu_gdb_get_reg, fpu_gdb_set_reg): New functions.
+	(cpu_m68k_register): Register FPU with gdb stub.
+	(cpu_dump_state): Fix FP register dumps.
+	* gdbstub/arm-core.xml: New file.
+	* gdbstub/arm-vfp.xml: New file.
+	* gdbstub/arm-vfp3.xml: New file.
+	* gdbstub/arm-neon.xml: New file.
+	* gdbstub/cf-fp.xml: New file.
+	* gdbstub/cf-core.xml: New file.
+	* target-arm/helper.c: Include gdbstub.h.
+	(vfp_gdb_get_reg, vfp_gdb_set_reg): New functions.
+	(cpu_arm_set_model): Register VFP with gdb stub.
+	* target-arm/cpu.h (arm_features): Add VFP3 and NEON.
+	* gdbstub.c (GDBRegisterState): Define.
+	(all_regs, gdb_has_xml, num_g_regs): New variables.
+	(put_packet_binary): New function.
+	(put_packet): Use it.
+	(NUM_CORE_REGS, GDB_CORE_XML): Define.
+	(cpu_gdb_read_registers, cpu_gdb_write_registers): Rename ...
+	(cpu_gdb_read_register, cpu_gdb_write_register): ... to this.
+	(memtox, get_feature_xml, gdb_read_register, gdb_write_register,
+	gdb_register_coprocessor): New functions.
+	(gdb_handle_packet): Use gdb_read_register and gdb_write_register.
+	Handle 'p', 'P', 'qSupported' and 'qXfer:features:read:' packets.
+
+2007-04-11  Vladimir Prus  <vladimir@codesourcery.com>
+
+	* vl.c (win_chr_stdio_poll): Use exit,
+	not do_quit, as the latter is not in public
+	interface of monitor.c.
+
+2007-04-11  Vladimir Prus  <vladimir@codesourcery.com>
+
+	* vl.c (struct WinCharState): New field quit_on_eof.
+	(win_chr_stdio_poll): New function.
+	(win_stdio_chr_close): New function.
+	(qemu_chr_open_win_stdio): New function.
+	(qemu_chr_open): Handle 'stdio' device on windows.
+
+^L
+Local Variables:
+mode: change-log
+change-log-default-name: "ChangeLog.csl"
+End:

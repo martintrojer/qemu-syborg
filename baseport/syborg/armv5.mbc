@@ -1,0 +1,74 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+SECTION_COMMANDS
+
+bldmake bldfiles armv5
+abld export
+
+abld makefile armv5
+abld reallyclean armv5
+
+bldmake bldfiles armv5
+abld export
+
+abld makefile armv5
+abld library armv5
+abld -k target armv5
+
+SECTION_DIRS
+..\..\..\..\os\kernelhwsrv\kerneltest\e32utils\group
+..\..\..\..\os\kernelhwsrv\kernel\eka
+..\..\..\..\os\kernelhwsrv\kernel\eka\compsupp
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\group
+..\..\..\..\os\kernelhwsrv\halservices\hal
+..\syborg
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\domainmgr\group
+
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\pbus\mmc\sdcard\sdcard3c
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\pbus\mmc\sdcard\sdcard4c
+
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\usbho
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\usbho\usbd
+
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\bsp
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\debug
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\ecomm
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\esound
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\ethernet
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\locmedia
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\media
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\trace
+..\..\..\..\os\kernelhwsrv\kernel\eka\drivers\usbc
+..\..\..\..\os\kernelhwsrv\kernel\eka\euser
+..\..\..\..\os\kernelhwsrv\kernel\eka\ewsrv
+
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\estart
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\etshell
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\iso9660
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\ntfs
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\scomp
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\sfat
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\sfat32
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\sftl
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\slffs
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\smassstorage
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\srofs
+..\..\..\..\os\kernelhwsrv\userlibandfileserver\fileserver\srom
+
+..\..\..\..\os\kernelhwsrv\kerneltest\e32test\group
+test

@@ -1,0 +1,20 @@
+Minor changes are required to get libfdt to build as part of qemu.
+The patch below records modifications relative to upstream dtc-v1.2.0.
+
+Index: libfdt_env.h
+===================================================================
+--- libfdt_env.h	(revision 230023)
++++ libfdt_env.h	(working copy)
+@@ -4,10 +4,9 @@
+ #include <stddef.h>
+ #include <stdint.h>
+ #include <string.h>
+-#include <endian.h>
+-#include <byteswap.h>
++#include "bswap.h"
+ 
+-#if __BYTE_ORDER == __BIG_ENDIAN
++#ifdef WORDS_BIGENDIAN
+ #define fdt32_to_cpu(x)		(x)
+ #define cpu_to_fdt32(x)		(x)
+ #define fdt64_to_cpu(x)		(x)

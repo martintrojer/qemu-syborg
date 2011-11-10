@@ -1,0 +1,73 @@
+========================================================================
+    NVMEMORY.DLL - A simple non volatile sector addressed memory device
+                - An example of a portable high abstraction model architecture. 
+                    This DLL is created to serve in multiple different modeling 
+                    environments and tools. Model portability should be taken into 
+                    account when further developing and maintaining this device.
+========================================================================
+
+========================================================================
+    USAGE       nvmemory.dll
+                Example usage provided by syborg_nvmemorydevice.py    
+    
+                1 - Create an instance of SyborgNVMemory class. 
+                    This can be performed either by instantiating the C++ class directly 
+                    by calling the constructor "new SyborgNVMemory( a_sectorsize );".
+                    Or by using the C API to create an instance "nvmem_create( sector_size )".
+                    As you can see you need to set the sector size for your device when you create it.
+                    
+                    In fact each of the API functions are provided in form of both C and C++ API functions.
+                    From this on only the C API is explained.
+                    
+                2 - Reset the device by calling "nvmem_reset( self.obj )". 
+                    This function clears any information stored by the device instance except the sector size.
+                    
+                    Note that for the C API you always need to specify the object which you wish to command.
+                    
+                3 - Create handle to your image file by calling "nvmem_open( self.obj, imagepath )". 
+                    Image is opened in binary mode. Store the handle.
+                    
+                    Note that you need to have an image stored to a path on your PC before you can call this function. 
+                    You must provide the image name and path when calling.
+                    
+                    Note also that there is a service provided by this DLL which can create an image for you. 
+                    NVMEMORY_API int32_t nvmem_create_image( SyborgNVMemory* a_syborg_nvmemory, char* a_memoryarrayname, uint32_t a_sectorcount, uint32_t a_sectorsize = NVMEM_DEFAULT_SECTORSIZE_IN_BYTES );
+                    nvmem_create_image function probably needs further development. You may also create image in your wrapper as done in example usage file.
+                    
+                    You may get your memory device size by calling nvmem_get_sector_count( self.obj, nvmemhandle ). 
+                    nvmemhandle is the handle you got when calling nvmem_open. 
+                    nvmem_get_sector_count is handy in cases where you have provided a readymade image for the device. 
+                    In this case you don't need to go and hardcode the image size each time in your wrapper.
+                
+                4 - Initialize callback. Provide a callback function for the device by calling "nvmem_set_callback( self.obj, nvmem_callback )". 
+                    Where the callback is a function pointer of a type "int (*i_NVMemCallBack)(int);". 
+                    Callback is called by DLL when read and write operations are finished. Parameter is the amount of sectors succesfully read or written.
+                    
+                5 - Start using your device.
+                    nvmem_read(  self.obj, nvmemory_sharedmemory_host_address, nvmemhandle, transaction_offset, transaction_size )
+                    nvmem_write(  self.obj, nvmemory_sharedmemory_host_address, nvmemhandle, transaction_offset, transaction_size )
+                    
+                See syborg_nvmemorydevice.py to learn more about device usage. 
+                    
+========================================================================
+
+
+========================================================================
+    DYNAMIC LINK LIBRARY : nvmemmory Project Overview
+========================================================================
+
+Summary of what you will find in each of the files that
+make up your nvmemmory application.
+
+nvmemmory.vcproj
+    This is the main project file for VC++ projects generated using an Application Wizard. 
+    It contains information about the version of Visual C++ that generated the file, and 
+    information about the platforms, configurations, and project features selected with the
+    Application Wizard.
+
+nvmemmory.cpp
+    This is the main DLL source file.
+
+nvmemmory.h
+    This file contains a class declaration.
+

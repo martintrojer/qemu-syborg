@@ -1,0 +1,11 @@
+# component name "Syborg baseport"
+
+component	syborg
+source	\sf\adaptation\qemu\baseport\syborg
+
+binary	\sf\adaptation\qemu\baseport\syborg all
+exports	\sf\adaptation\qemu\baseport\syborg
+
+notes_source	\component_defs\release.src
+
+ipr E 

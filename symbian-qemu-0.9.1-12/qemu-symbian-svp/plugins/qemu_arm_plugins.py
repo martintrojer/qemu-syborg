@@ -1,0 +1,9 @@
+import syborg_fb
+import syborg_interrupt
+import syborg_rtc
+import syborg_serial
+import syborg_timer
+import syborg_keyboard
+import syborg_pointer
+#import syborg_usbtest
+import syborg_nvmemorydevice

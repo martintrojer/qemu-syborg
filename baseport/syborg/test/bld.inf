@@ -1,0 +1,54 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+* NTT DOCOMO, INC - Fix for bug 1291 "E32test t_tock.exe failed to load Logical Device"
+*
+* Description:
+*
+*/
+
+PRJ_PLATFORMS
+ARMV5
+
+PRJ_TESTEXPORTS
+autoexec.bat	                /epoc32/rom/syborg/	//
+
+PRJ_TESTMMPFILES
+
+// Drivers
+// NTT Docomo - Defect 1291 fix - E32test t_tock.exe failed to load Logical Device - start
+
+// requires baseport specific definitions for TIMER and TimeDelta in d_mstim.cpp 
+../../../../../os/kernelhwsrv/kerneltest/e32test/group/d_mstim		support
+
+// requires baseport specific definitions for TIMER and TimeDelta and LongTimeDelta in d_tick.cpp 
+../../../../../os/kernelhwsrv/kerneltest/e32test/group/d_tick		support
+
+// requires definitions for KTickPeriodMs and KTicksPerMillisecond. These are baseport specific and require changes to d_latncy
+// Not yet implemented...
+// ../../../../../os/kernelhwsrv/kerneltest/e32test/group/d_latncy		support
+
+../../../../../os/kernelhwsrv/kerneltest/e32test/group/d_shadow		support
+
+// Not yet implemented...
+// ../../../../../os/kernelhwsrv/kerneltest/e32test/group/bm_pdd		support
+
+//../../../../../os/kernelhwsrv/kerneltest/e32test/group/d_sharedio		support
+
+// needs dma.dll
+//../../../../../os/kernelhwsrv/kerneltest/e32test/group/d_dma		support  // DMA kernel-side test harness for real DMA framework
+
+// needs epbusm.dll
+//../../../../../os/kernelhwsrv/kerneltest/e32test/group/d_medch		support
+
+../../../../../os/kernelhwsrv/kerneltest/e32test/group/d_cache		support
+// NTT Docomo - Defect 1291 fix - E32test t_tock.exe failed to load Logical Device - end

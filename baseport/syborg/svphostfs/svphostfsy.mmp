@@ -1,0 +1,41 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+TARGET			svphostfsy.fsy
+TARGETTYPE		fsy
+
+SOURCEPATH		fs
+SOURCE			svphostfsy.cpp svphostmnt.cpp svphostfil.cpp svphostdir.cpp rsvphostfsdriver.cpp
+NOSTRICTDEF
+
+SYSTEMINCLUDE	inc	
+SYSTEMINCLUDE	/epoc32/include 
+OS_LAYER_SYSTEMINCLUDE
+
+LIBRARY			efsrv.lib euser.lib hal.lib
+LIBRARY			efile.lib
+
+UID		0x100039df 0x10000CEE
+VENDORID 0x70000001
+
+unpaged
+
+TARGETPATH 	/sys/bin
+
+//CAPABILITY TCB ProtServ DiskAdmin AllFiles PowerMgmt CommDD
+#include "../../../../../os/kernelhwsrv/userlibandfileserver/fileserver/group/f32caps.mmh"  // Capabilities of File Server process
+#include "../../../../../os/kernelhwsrv/userlibandfileserver/fileserver/group/f32.mmh"      // Generic definitions for the whole f32 component

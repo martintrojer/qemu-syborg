@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE feature SYSTEM "gdb-target.dtd">
+<feature name="org.gnu.gdb.arm.vfp">
+  <reg name="d0" bitsize="64" type="float"/>
+  <reg name="d1" bitsize="64" type="float"/>
+  <reg name="d2" bitsize="64" type="float"/>
+  <reg name="d3" bitsize="64" type="float"/>
+  <reg name="d4" bitsize="64" type="float"/>
+  <reg name="d5" bitsize="64" type="float"/>
+  <reg name="d6" bitsize="64" type="float"/>
+  <reg name="d7" bitsize="64" type="float"/>
+  <reg name="d8" bitsize="64" type="float"/>
+  <reg name="d9" bitsize="64" type="float"/>
+  <reg name="d10" bitsize="64" type="float"/>
+  <reg name="d11" bitsize="64" type="float"/>
+  <reg name="d12" bitsize="64" type="float"/>
+  <reg name="d13" bitsize="64" type="float"/>
+  <reg name="d14" bitsize="64" type="float"/>
+  <reg name="d15" bitsize="64" type="float"/>
+
+  <reg name="fpsid" bitsize="32" type="int" group="float"/>
+  <reg name="fpscr" bitsize="32" type="int" group="float"/>
+  <reg name="fpexc" bitsize="32" type="int" group="float"/>
+</feature>

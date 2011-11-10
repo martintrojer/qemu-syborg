@@ -1,0 +1,66 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+#ifndef __SYBORG_OBY__
+#define __SYBORG_OBY__
+
+define LANGID 01
+define BUILDNO 0
+define VERSION 0.01
+
+DEFAULT_LANGUAGE 01
+
+REM #undef  _ARM4
+REM #define _ARM4
+
+#define __SYBORG__
+#define	__ARM_HW_PLATFORM__
+#define SYMBIAN_EXCLUDE_MTP
+
+define SYBORG_L1		0x0b0a0001
+define VARIANT			syborg
+define VARID			SYBORG_L1
+define ASSP_DIR			EPOCROOT##epoc32\release\syborg
+
+// increased size of ROM, due to overflow
+//define ROMMEGS			15		/* !! HEX !! */
+
+define ROMMEGS			50		/* !! HEX !! */
+define PLATFORM_NAME		syborg
+#define BASEPORT_DRV <base_syborg.iby>
+#define COLOR
+#undef SYMBIAN_EXCLUDE_SCDV
+
+
+
+REM defines for IrDA options
+REM Uncomment the line below to enable IrDA to use a Jeteye ESI09680 pod with serial card adapter
+REM #define _ENABLE_IRDA_POD_
+REM define which port IrDA uses
+define IRPOD_ESK irda_port1.esk
+
+REM define which serial port Bluetooth protocol uses
+define BLUETOOTH_ESK bt_port2.esk
+
+REM Define whether or not to include USB client support:
+
+#define EUSBC
+
+
+ROMBUILD_OPTION -no-header 
+
+#endif

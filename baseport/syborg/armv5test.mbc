@@ -1,0 +1,41 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+SECTION_COMMANDS
+
+bldmake bldfiles armv5
+abld export
+abld test export
+
+abld makefile armv5
+abld test makefile armv5
+abld reallyclean armv5
+abld test reallyclean armv5
+
+bldmake bldfiles armv5
+abld export
+
+abld makefile armv5
+abld test makefile armv5
+abld library armv5
+abld test library armv5
+abld -k target armv5
+abld test -k target armv5
+
+SECTION_DIRS
+..\..\..\..\os\kernelhwsrv\kerneltest\e32test\group
+test

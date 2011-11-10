@@ -1,0 +1,62 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+* NTT DOCOMO, INC - Fix for bug 1291 "E32test t_tock.exe failed to load Logical Device"
+*
+* Description:
+*
+*/
+
+#define HEAPMAX(x)
+
+#define VARID		0x0b0a0001
+#define MAGIC		0x0b0a0001
+#define ALL			0x0b0a0001
+#define FIXED
+
+kerneltrace 0x80000000
+
+memmodel multiple 0x100000
+//memmodel flexible 0x100000 0x1000 -0x4000
+//dlldatatop 0x7f000000
+
+trace 0x10
+collapse arm gcc 0
+multikernel
+
+version=0.01
+bootbinary=\epoc32\release\##MAIN##\_syborg_bootloader_bootrom.bin
+
+debugport 0
+romsize=0x2000000
+romlinearbase=0x80000000
+romalign=0x10
+kerneldataaddress=0xC8000000
+kernelheapmin=0x08000			// calculated at boot time
+kernelheapmax=0x00FFF000
+dataaddress=0x400000
+defaultstackreserve=0x200000
+romchecksum=0x12345678
+
+nowrapper				// no rom header
+
+//MMC/SD not used, exclude MMC partition Library
+#define USE_CUSTOM_MMC_PARTITION    // "none" is a form of customisation
+
+#ifdef UNICODE
+unicode
+#endif
+
+// NTT Docomo - Defect 1291 fix - E32test t_tock.exe failed to load Logical Device - start
+#define VARIANT_PATH_OUTSIDE_SF_OS
+#define VARIANT_PATH sf\adaptation\qemu\baseport\syborg
+// NTT Docomo - Defect 1291 fix - E32test t_tock.exe failed to load Logical Device - end

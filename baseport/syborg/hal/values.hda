@@ -1,0 +1,51 @@
+EManufacturer=intel
+EManufacturerHardwareRev=0x1
+EManufacturerSoftwareRev=0x100
+EManufacturerSoftwareBuild=0x250
+EModel=0x42525453
+// NTT Docomo - Defect 1292 fix - E32test t_mstim.exe failed to load test LDD - start
+EMachineUid=0x10005152
+// NTT Docomo - Defect 1292 fix - E32test t_mstim.exe failed to load test LDD - end
+EDeviceFamily=crystal
+EDeviceFamilyRev=0x001
+ECPU=arm
+ECPUArch=0xC0
+ECPUABI=arm5
+
+// NTT Docomo - Defect 1290 fix - E32test t_atomic.EXE failed with unhandled exception handling - start
+//
+// NTT DOCOMO, INC - Fix for bug 1290 "E32test t_atomic.EXE failed with unhandled exception handling"
+// Mark as not supported (comment-out), because it doesn't make sense on a non cycle-accurate simulator platform...
+// ECPUSpeed=0
+//
+// NTT Docomo - Defect 1290 fix - E32test t_atomic.EXE failed with unhandled exception handling - end
+
+ESystemStartupReason=cold
+ESystemException=0
+ESystemTickPeriod=15625
+EMemoryRAM=4
+EMemoryRAMFree=2
+EMemoryROM=12
+EMemoryPageSize=0x1000
+EPowerGood=1
+EPowerExternal=1
+EMouse=1
+EMouseState=1
+EMouseSpeed=1
+EMouseAcceleration=1
+EMouseButtons=2
+EMouseButtonState=0
+EMouseX=640
+EMouseY=480
+ECaseSwitch=0
+EIntegratedPhone=0
+ELanguageIndex=0
+EDebugPort=0
+EClipboardDrive=2
+ESystemDrive=0xffff
+EDisplayNumberOfScreens=1
+ENanoTickPeriod=10000
+EFastCounterFrequency=1000000
+EFastCounterCountsUp=1
+
+

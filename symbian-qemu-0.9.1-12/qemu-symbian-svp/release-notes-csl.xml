@@ -1,0 +1,174 @@
+<!-- This file contains a series of release note fragments processed
+     by gnu-notes.  To add a note to it, use "gnu-notes -a
+     $release_config qemu".  The TARGET line should contain a
+     list of shell glob patterns for target names to which the note is
+     relevant; it may be removed if it is relevant to all targets.
+ -->
+
+      <!-- UUID: 7e07bb60-d5ec-47f1-95b0-f079a44b537b -->
+      <!-- TARGET: *-linux* -->
+      <formalpara>
+        <title>QEMU user-mode debugging improvements</title>
+        <para>
+          The QEMU user-mode emulator now reports all fatal signals
+          (except <literal>SIGKILL</literal>) to the debugger.  A bug
+          that caused the debugger interface to malfunction when an
+          application called the <function>fork</function> function
+          has also been fixed.
+        </para>
+      </formalpara>
+
+      <!-- UUID: 5c1a4071-8526-43df-9c4c-159e9b2b3de1 -->
+      <!-- TARGET: powerpc* -->
+      <formalpara>
+        <title>QEMU single-stepping fix</title>
+        <para>
+	  A bug in QEMU has been fixed that caused incorrect results or a QEMU crash
+	  when running applications under the control of the debugger.  The bug affected
+	  single-stepping over branch instructions, including step operations performed
+	  implicitly by the debugger
+	  <phrase target-os="linux">on program startup or</phrase>
+	  when continuing from a breakpoint.
+        </para>
+      </formalpara>
+
+      <!-- UUID: 1c923ae4-90cd-4acd-9f4a-f1b90ece5074 -->
+      <!-- TARGET: powerpc*-linux* -->
+      <formalpara>
+        <title>QEMU user-mode emulator error</title>
+        <para>
+	  A bug has been fixed that prevented the QEMU user-mode
+	  emulator from running on some Linux hosts.  The bug caused
+	  QEMU to exit immediately with the error message
+	  <literal>mmap: No such device or address</literal>.
+        </para>
+      </formalpara>
+
+      <!-- UUID: 0a2f0a6e-3211-4c8b-ba35-9ac2bd8bd727 -->
+      <!-- TARGET: powerpc* -->
+      <formalpara>
+        <title><trademark>AltiVec</trademark> instruction support</title>
+        <para>
+          QEMU now supports the <trademark>AltiVec</trademark>
+          instruction set extensions.  To build programs containing
+          AltiVec instructions, use the <option>-te600</option>
+          command-line option.  To run programs containing AltiVec
+          instructions, use the <option>--cpu 7400</option> command-line
+	  option when starting QEMU.
+        </para>
+      </formalpara>
+
+      <!-- UUID: 677695c7-3cb0-49d4-ba48-1f6e7dd6edb6 -->
+      <!-- TARGET: arm*-* -->
+      <formalpara>
+        <title>Improvements to NEON support in QEMU</title>
+        <para>
+	  Several bugs in the QEMU NEON emulation have been fixed. These
+	  caused incorrect results or crashes when executing NEON code.
+	</para>
+      </formalpara>
+
+      <!-- UUID: 7808e9a6-dcb4-4e2d-a9e8-2b1550aa964a -->
+      <!-- TARGET: powerpc*-linux* -->
+      <formalpara>
+        <title>E500 CPU emulation for QEMU</title>
+        <para>
+          QEMU now supports the <option>--cpu e500</option> and
+          <option>--cpu e500v2</option> command-line options to enable
+          E500-specific instructions.
+        </para>
+      </formalpara>
+
+      <!-- UUID: ff44ff62-5543-4675-9cb2-79a3b86055cd -->
+      <!-- TARGET: *-linux* -->
+      <formalpara>
+        <title>Debugging across <function>fork</function> calls</title>
+        <para>
+          A bug that caused the GDB interface in the QEMU user-mode emulator
+          to malfunction when an application called the
+          <function>fork</function> function has been fixed.  It is now
+          possible to continue debugging the parent process after it has
+          called <function>fork</function>.
+        </para>
+      </formalpara>
+
+      <!-- UUID: 1644e374-4d4b-48b2-b452-2b1e88f48dde -->
+      <!-- TARGET: *-linux* -->
+      <formalpara>
+        <title>Kernel version reported by QEMU</title>
+        <para>
+	  The Linux kernel version reported by the QEMU user-mode emulator 
+	  now defaults to the minimum version required by the included 
+	  GNU C library, rather than that of the host Linux system.
+	  This fixes problems with <literal>FATAL: kernel too old</literal>
+	  errors when running QEMU on hosts with older kernels.
+	  For more information, refer to <xref linkend="qemu-user-space"/>.
+        </para>
+      </formalpara>
+
+      <!-- UUID: 5fdb96bb-759d-4623-b3d7-87cb95d743b1 -->
+      <!-- TARGET: *-linux* -->
+      <formalpara>
+        <title>QEMU emulator</title>
+        <para>
+          &csl_prod; now includes the QEMU user-mode emulator for Linux
+          hosts.
+          QEMU uses just-in-time translation of target machine instructions
+          to provide high-performance simulation of target applications.
+          System calls on the &csl_target_name; target are translated
+          into corresponding calls on the host Linux system.  
+          Refer to <xref linkend="chap-building"/> for more information about 
+          using QEMU. 
+        </para>
+      </formalpara>
+
+      <!-- UUID: ebc37639-83f8-4e3c-8e43-7d3ed094692c -->
+      <!-- TARGET: arm-none-eabi  -->
+      <formalpara>
+        <title>QEMU CPU simulator</title>
+        <para>
+          The GDB instruction-set simulator has been replaced with QEMU.
+          QEMU uses just-in-time translation of target machine instructions
+          to provide high-performance simulation of target applications.
+          Note that QEMU was provided as an undocumented feature in a
+          previous release, but it is now invoked differently; you can now
+          run QEMU from GDB using the new 
+          <command>target qemu</command> command.
+          Refer to <xref linkend="chap-building"/> for more information about 
+          using QEMU. 
+        </para>
+      </formalpara>
+
+      <!-- UUID: d059230a-847a-4348-904d-72ca66e0a4a6 -->
+      <!-- TARGET: powerpc-eabi -->
+      <formalpara>
+        <title>QEMU CPU simulator</title>
+        <para>
+          The GDB instruction-set simulator has been replaced with QEMU.
+          QEMU uses just-in-time translation of target machine instructions
+          to provide high-performance simulation of target applications.
+          You can invoke QEMU from GDB using the new 
+          <command>target qemu</command> command.
+          Refer to <xref linkend="chap-building"/> for more information about 
+          using QEMU. 
+        </para>
+      </formalpara>
+
+      <!-- UUID: ddfba6d3-f504-432a-9f6e-f7f02d02ae98 -->
+      <!-- TARGET: m68k-elf -->
+      <formalpara>
+        <title>QEMU CPU simulator</title>
+        <para>
+          &csl_prod; now includes the QEMU CPU simulator.
+          QEMU uses just-in-time translation of target machine instructions
+          to provide high-performance simulation of target applications.
+          Note that QEMU was provided as an undocumented feature in a
+          previous release, but it is now invoked differently; you can now
+          run QEMU from GDB using the new 
+          <command>target qemu</command> command.
+          Refer to <xref linkend="chap-building"/> for more information about 
+          using QEMU. 
+        </para>
+      </formalpara>
+
+<!-- Release notes end here.  -->

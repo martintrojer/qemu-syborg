@@ -1,0 +1,75 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+#include <syborg_priv.h>
+
+//
+//	Timer Access Functions
+//
+
+// Set the starting count value for a timer
+EXPORT_C void __NAKED__ TSyborg::SetTimerLoad(TUint /*aTimerBase*/, TUint32 /*aValue*/)
+{
+  asm("str r1, [r0, #12]");
+  asm("bx lr");
+}
+
+// Read the load register (starting count value)
+EXPORT_C TUint __NAKED__ TSyborg::TimerLoad(TUint /*aTimerBase*/)
+{
+  asm("ldr r0, [r0, #12]");
+  asm("bx lr");
+}
+
+// Read the actual timer value
+EXPORT_C TUint __NAKED__ TSyborg::TimerValue(TUint /*aTimerBase*/)
+{
+	asm("ldr r0, [r0, #16]");
+    asm("bx lr");
+}
+
+// Clear the timer interrupt by writing a value to Timer x clear register
+// The written value doesn't matter as any value will clear the interrupt.
+EXPORT_C void __NAKED__ TSyborg::ClearTimerInt(TUint /*aTimerBase*/)
+{
+	asm("mov r1, #1");	
+	asm("str r1, [r0, #24]");
+    asm("bx lr");
+}
+
+//
+//Interrupt Controller Acces Functions
+//
+
+// Enable specified motherboard Int on either the PIC/SIC
+EXPORT_C void __NAKED__ TSyborg::EnableInt(TUint /*anId*/)
+{
+  asm("ldr r1, __KHwInt");
+  asm("str r0, [r1, #20]");
+  asm("bx lr");
+}
+
+// Disable specified motherboard Int on either the PIC/SIC
+EXPORT_C void __NAKED__ TSyborg::DisableInt(TUint /*anId*/)
+{
+  asm("ldr r1, __KHwInt");
+  asm("str r0, [r1, #16]");
+  asm("bx lr");
+	
+	asm("__KHwInt:");
+	asm(".word %a0" : : "i" ((TInt)(KHwBaseSic)));
+}

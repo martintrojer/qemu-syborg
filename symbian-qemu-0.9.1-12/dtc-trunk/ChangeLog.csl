@@ -1,0 +1,31 @@
+2009-01-20  Paul Brook  <paul@codesourcery.com>
+
+	* dtc.c (main): Set file to binary mode.
+	* flattree.c (dt_from_blob): Set file to binary mode.
+
+2008-12-08  Paul Brook  <paul@codesourcery.com>
+
+	* ftdump.h (usage): New function.
+	(main): Handle --help and --version.
+	* dtc-lexer.l: Rename dtc-parser.tab.h to dtc-parser.h.
+	* dtc.c (usage): Print to stdout and exit cleanly if no error occured.
+	(main): Parse --help and --version options.  Don't error if --help
+	passed.
+	* configure.ac: New file.
+	* acinclude.m4: New file.
+	* Makefile.am: New file.
+	* Makefile: Rename...
+	* Makefile.upstream: ... to this.
+	* configure: Regenerate.
+	* Makefile.in: Regenerate.
+	* depcomp: Regenerate.
+	* config.guess: Regenerate.
+	* cofig.sub: Regenerate.
+	* config.h.in: Regenerate.
+	* missing: Regenerate.
+	* aclocal.m4: Regenerate.
+	* install-sh: Regenerate.
+
+2008-12-04  Paul Brook  <paul@codesourcery.com>
+
+	* fstree.c: Add lstat hack for win32.

@@ -1,0 +1,151 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description:
+*
+*/
+
+PRJ_PLATFORMS
+ARMV5
+
+PRJ_EXPORTS
+syborg.oby						/epoc32/rom/include/	//
+//MattD - don't export the base.iby as you end up fighting with the kernel and everyone else...
+//base.iby						/epoc32/rom/include/	//
+rom/base_syborg.iby				/epoc32/rom/include/	//
+rom/header.iby					/epoc32/rom/syborg/		//
+rom/kernel.iby					/epoc32/rom/syborg/		//
+specific/syborg.cfg				/epoc32/rom/syborg/		//
+estart.txt						/epoc32/rom/syborg/		//
+syborg.dtb						/epoc32/rom/syborg/		//
+trk_l1.ini						/epoc32/data/Z/trk/trk_syborg.ini
+webcamera/webcamera_driver.h				/epoc32/include/syborg/
+webcamera/webcamera_driver.inl				/epoc32/include/syborg/
+specific/variantmediadef.h /epoc32/include/syborg/variantmediadef.h
+//specific/assp.cpp    /epoc32/include/syborg/assp.cpp
+specific/highrestimer.h    /epoc32/include/syborg/highrestimer.h
+//specific/syborg.cpp    /epoc32/include/syborg/syborg.cpp
+specific/syborg.h    /epoc32/include/syborg/syborg.h
+specific/syborg_priv.h    /epoc32/include/syborg/syborg_priv.h
+specific/system.h    /epoc32/include/syborg/system.h
+specific/system_priv.h    /epoc32/include/syborg/system_priv.h
+
+PRJ_EXTENSIONS
+start		extension		base/genexec
+#ifdef SYMBIAN_OLD_EXPORT_LOCATION
+option INC_PATH   $(EPOCROOT)epoc32/include
+#else
+option INC_PATH  $(EPOCROOT)epoc32/include/platform
+#endif
+option		EXTRA_SRC_PATH  $(EXTENSION_ROOT)/../../../../os/kernelhwsrv/kernel/eka/kernel
+end
+
+PRJ_MMPFILES
+../../../../os/kernelhwsrv/kernel/eka/kernel/ekern
+../../../../os/kernelhwsrv/kernel/eka/kernel/kc_exe
+../../../../os/kernelhwsrv/kernel/eka/kernel/exmoncommon
+../../../../os/kernelhwsrv/kernel/eka/drivers/medint/medint
+../../../../os/kernelhwsrv/userlibandfileserver/fileserver/etshell/eshell
+../../../../os/kernelhwsrv/kernel/eka/drivers/trace/btracex
+../../../../os/kernelhwsrv/kernel/eka/euser/variant_euser
+
+// SYBORG components
+kasyborg						// Variant library
+serial/serial					// Serial / UART ports
+fb/fb							// Framebuffer
+
+
+keyboard/keyboard				// Keyboard
+pointer/pointer					// Pointer
+
+pointer/pointer_landscape.mmp
+pointer/pointer_portrait.mmp
+
+monitor/monap					// Crash Debugger output
+
+keymap/keymap					// Key mapping library
+
+estart/estart				// Customised estart to kick-start hostfs files system
+
+
+// platform device library - for flattened device tree (FDT)
+svpplatform/fdt
+
+//Host Filesystem
+svphostfs/svphostfs
+svphostfs/svphostfsdriver
+svphostfs/svphostfsstart
+svphostfs/svphostfsy
+
+//Snap Device
+svpsnapdriver/svpsnapdriver
+svpsnapdriver/snapapp
+
+//NGA framebuffer
+svpframebuffer/svpframebuffer
+
+//Add Sound Driver
+soundsc\soundsc
+
+//Webcamera Device
+webcamera/webcamera_pdd
+webcamera/webcamera_ldd
+webcamera/webcamera_app
+
+//Non volatile memory device
+mednvmemory/mednvmemory
+
+// Ethernet
+ethernet/pdd/enet
+
+PRJ_EXTENSIONS
+start		extension		base/config
+option		PREFIX			_syborg_
+option		HALPATH			$(EXTENSION_ROOT)/../../../../os/kernelhwsrv/halservices
+option		SOURCE			$(EXTENSION_ROOT)/hal
+end
+
+PRJ_MMPFILES
+hal/hal
+
+PRJ_EXTENSIONS
+start		extension		base/bootstrap
+#ifdef SYMBIAN_OLD_EXPORT_LOCATION
+option INC_PATH   $(EPOCROOT)epoc32/include
+#else
+option INC_PATH  $(EPOCROOT)epoc32/include/platform
+#endif
+#ifdef GCCE
+option		GCCE			GCCE
+#endif
+#ifdef ARMCC
+option		ARMCC			ARMCC
+#endif
+option		NAME			_syborg_bootloader_bootrom
+option		MEMMODEL		multiple
+//option		MEMMODEL		flexible
+//option		MEMMODEL		moving
+option		SOURCES			syborg.s
+//option		INCLUDES		$(EXTENSION_ROOT)/config.inc $(EXTENSION_ROOT)/bootstrap/syborg.inc
+option		INCLUDES		config.inc syborg.inc
+option		E32PATH			$(EXTENSION_ROOT)/../../../../os/kernelhwsrv/kernel
+option		EXTRA_INC_PATH	$(EXTENSION_ROOT)/bootstrap
+option		EXTRA_SRC_PATH	$(EXTENSION_ROOT)/bootstrap
+end
+
+// Build image armv5 for urel and udeb
+PRJ_EXTENSIONS
+start	extension	base/rom
+option	REE_TARGET	syborg
+option	TYPE	tshell
+end

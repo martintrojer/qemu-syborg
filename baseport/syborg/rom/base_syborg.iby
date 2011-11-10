@@ -1,0 +1,160 @@
+/*
+* Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+* All rights reserved.
+* This component and the accompanying materials are made available
+* under the terms of the License "Eclipse Public License v1.0"
+* which accompanies this distribution, and is available
+* at the URL "http://www.eclipse.org/legal/epl-v10.html".
+*
+* Initial Contributors:
+* Nokia Corporation - initial contribution.
+*
+* Contributors:
+*
+* Description: Used by techview roms
+*
+*/
+
+#ifndef __BASE_SYBORG_IBY__
+#define __BASE_SYBORG_IBY__
+
+#define HEAPMAX(x)
+//#define FIXED	fixed
+#define FIXED
+
+kerneltrace 0x80000000
+
+memmodel multiple 0x100000
+//memmodel flexible 0x100000 0x1000 -0x4000
+//dlldatatop 0x7f000000
+
+multikernel
+bootbinary=		KERNEL_DIR\_PLATFORM_NAME_bootloader_bootrom.bin
+
+debugport 0
+
+// Fixed rom over flow
+//romsize=0x2000000
+romsize=0x8000000
+
+romlinearbase=0x80000000
+romalign=0x10
+kerneldataaddress=0xC8000000
+kernelheapmin=0x08000			// calculated at boot time
+kernelheapmax=0x00FFC000
+dataaddress=0x400000
+defaultstackreserve=0x200000
+romchecksum=0x12345678
+
+// Must align kernel to 16K boundary since exception vectors will be mapped at 0xFFFF0000
+primary[VARID]=		KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_ekern.exe		\sys\bin\ekern.exe	code-align 0x4000
+
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_btracex.ldd 	\sys\bin\btracex.ldd
+file=			ABI_DIR\DEBUG_DIR\btracec.dll	            		\sys\bin\btracec.dll
+
+define BTRACEX_LDD _PLATFORM_NAME_btracex.ldd
+            
+variant[VARID]=		KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_kasyborg.dll 	\sys\bin\kasyborg.dll
+
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_exmoncommon.dll    	\sys\bin\exmoncommon.dll
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_exmondebug.dll     	\sys\bin\exmondebug.dll
+
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\kdebug.dll			        \sys\bin\kdebug.dll
+
+#ifdef RMDEBUG
+#include "..\include\trk.iby"
+#endif
+
+// IEEE-mode VFP support
+//extension[VARID]=	KERNEL_DIR\DEBUG_DIR\evfp.dll			        \sys\bin\evfp.dll
+
+
+// Either include NGA or Non NGA Framebuffer
+#ifdef SYMBIAN_BASE_USE_GCE
+extension[VARID]=KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_svpframebuffer.dll	\sys\bin\lcd.dll
+device[VARID]=KERNEL_DIR\DEBUG_DIR\display.ldd				\sys\bin\display0.ldd
+#else
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_lcd.dll		\sys\bin\lcd.dll
+#endif
+
+
+device[VARID]=		KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_eserial.pdd		\sys\bin\euart1.pdd
+device[VARID]=		KERNEL_DIR\DEBUG_DIR\ecomm.ldd				\sys\bin\ecomm.ldd
+
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\elocd.ldd				\sys\bin\elocd.ldd
+
+
+// Changes allowing us of either portrait or landscape mode
+//extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_epointer.dll	\sys\bin\epointer.dll
+#ifdef _PORTRAIT_
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_epointer_portrait.dll	\sys\bin\epointer.dll
+#else
+extension[VARID]=KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_epointer_landscape.dll	        \sys\bin\epointer.dll
+#endif
+
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_medint.pdd	        \sys\bin\medint.pdd
+
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\exstart.dll		 	\sys\bin\exstart.dll
+
+// Keyboard driver
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_ekeyb.dll		\sys\bin\ekeyb.dll
+
+// Kernel pipe
+
+//device[VARID]	=KERNEL_DIR\DEBUG_DIR\pipelib.ldd					    \sys\bin\pipelib.ldd
+
+/* Generic nonvolatile memory */
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_mednvmemory.pdd		\sys\bin\mednvmemory.pdd
+
+/* Ethernet drivers */
+device[VARID]=KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_ethernet.pdd		\sys\bin\ethernet.pdd
+device[VARID]=KERNEL_DIR\DEBUG_DIR\enet.ldd							\sys\bin\enet.ldd
+
+// Host Filesystem
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_svphostfsdriver.ldd sys\bin\svphostfsdriver.ldd
+file=			KERNEL_DIR\DEBUG_DIR\svphostfsy.fsy			sys\bin\svphostfsy.fsy
+file=			KERNEL_DIR\DEBUG_DIR\svphostfs.exe			sys\bin\svphostfs.exe
+
+// Conflicts with /epoc32/rom/include/core/os/starter.iby
+//file=			KERNEL_DIR\DEBUG_DIR\svphostfsstart.exe			sys\bin\sysstart.exe
+
+
+// file=			KERNEL_DIR\DEBUG_DIR\stdnew.dll				sys\bin\stdnew.dll
+
+// Snap Driver
+extension[VARID]=	KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_svpsnapdriver.ldd	sys\bin\svpsnapdriver.ldd
+file=			KERNEL_DIR\DEBUG_DIR\snapapp.exe			sys\bin\snapapp.exe
+
+// Webcamera Driver
+device[VARID]=		KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_webcamera.pdd	sys\bin\webcamera.pdd
+device[VARID]=		KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_ewebcamera.ldd	sys\bin\ewebcamera.ldd
+file=			KERNEL_DIR\DEBUG_DIR\webcamera_app.exe			sys\bin\webcamera_app.exe
+
+// Estart drive mapping setup files.
+data=			EPOCROOT##epoc32\rom\syborg\estart.txt			\sys\data\estart.txt
+
+define	HAL_DLL		_PLATFORM_NAME_hal.dll
+
+//define	ESTART_EXE	e32strt.exe
+define	ESTART_EXE		_PLATFORM_NAME_e32strt.exe	// customised ESTART
+
+define	KEYMAP_FILE	_PLATFORM_NAME_ekdata
+
+file=ABI_DIR\DEBUG_DIR\KEYMAP_FILE.dll	\sys\bin\ekdata.dll
+
+#define	SCDV_DLL        _generic_scdv.dll
+#define	EUSER_DLL	_PLATFORM_NAME_euser.dll
+
+device[VARID] 	=KERNEL_DIR\DEBUG_DIR\pipelib.ldd		\sys\bin\pipelib.ldd
+
+
+device[VARID]	=KERNEL_DIR\DEBUG_DIR\_PLATFORM_NAME_soundsc.pdd	    \sys\bin\soundsc.pdd
+device[VARID]	=KERNEL_DIR\DEBUG_DIR\esoundsc.ldd				            \sys\bin\esoundsc.ldd
+
+//add sampling profiler
+file= KERNEL_DIR\DEBUG_DIR\profiler.exe		\sys\bin\profiler.exe
+device[VARID] =KERNEL_DIR\DEBUG_DIR\sampler.ldd		\sys\bin\sampler.ldd
+
+
+#endif  // __BASE_SYBORG_IBY__
+
