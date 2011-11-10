@@ -1,0 +1,15 @@
+QEMU virtual board, Symbian Baseport (BSP) and tools
+
+Copyright Martin Trojer <martin.trojer@gmail.com>
+
+This is a dump of the Symbian Foundation repository of the "QEMU project".
+The aim of the project was to create a viable emulated execution platform
+for development and testing of symbian system and user applications.
+
+The project was orgininally run by a small team (Martin Trojer, Andy Sizer)
+from withing Symbian Ltd and later transitioned to open-source domain
+within the Symbian Foundation.
+
+For more information see
+
+
